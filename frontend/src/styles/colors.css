@@ -1,0 +1,63 @@
+:root {
+    /* Theme Colors */
+    --primary-color: #006064;
+    /* Deep Teal */
+    --secondary-color: #00acc1;
+    /* Aqua/Blue */
+    --accent-color: #ff9800;
+    /* Soft Orange */
+    --dark-color: #1a1a1a;
+    --light-color: #f4f4f4;
+    --white: #ffffff;
+    --gray: #757575;
+
+    /* Typography */
+    --font-main: 'Inter', sans-serif;
+
+    /* Transitions */
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    line-height: 1.6;
+    color: var(--dark-color);
+    background-color: var(--white);
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-padding {
+    padding: 80px 0;
+}
+
+@media (max-width: 768px) {
+    .section-padding {
+        padding: 50px 0;
+    }
+}
