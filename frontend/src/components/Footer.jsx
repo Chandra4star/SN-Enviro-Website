@@ -24,13 +24,13 @@ const Footer = ({ isDarkMode }) => {
         <footer className={`relative overflow-hidden pt-12 md:pt-24 pb-8 md:pb-12 transition-colors duration-500 ${isDarkMode ? 'bg-slate-950 text-white' : 'bg-slate-900 text-white'}`}>
 
             {/* Background Image Overlay */}
-            <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
+            <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
                 <img
-                    src="/assets/Gemini_Generated_Image_srgh2jsrgh2jsrgh.png"
-                    alt="Footer Background"
-                    className="w-full h-full object-cover filter grayscale"
+                    src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=100&w=3840"
+                    alt="Footer Background Map"
+                    className="w-full h-full object-cover filter grayscale mix-blend-overlay"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-slate-950/50"></div>
             </div>
 
             <motion.div
@@ -63,7 +63,7 @@ const Footer = ({ isDarkMode }) => {
                     <motion.div variants={itemVariants}>
                         <h3 className="text-lg font-bold mb-8 text-white">Company</h3>
                         <ul className="space-y-4">
-                            {['Home', 'About Us', 'Services', 'Products', 'Contact'].map((item) => (
+                            {['Home', 'About Us', 'Services', 'Products', 'Blog', 'Contact'].map((item) => (
                                 <li key={item}>
                                     <a href={`#${item.toLowerCase().replace(' ', '')}`} className="text-slate-400 hover:text-emerald-500 text-sm flex items-center gap-2 group transition-colors no-underline w-fit">
                                         <ArrowUpRight size={14} className="text-emerald-500 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300" />

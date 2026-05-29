@@ -10,6 +10,20 @@ const Contact = ({ isDarkMode }) => {
         message: ''
     });
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
+    const [settings, setSettings] = useState({});
+
+    React.useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/settings');
+                const data = await response.json();
+                setSettings(data);
+            } catch (error) {
+                console.error("Failed to fetch settings:", error);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -98,7 +112,7 @@ const Contact = ({ isDarkMode }) => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Contact Info */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
@@ -107,10 +121,10 @@ const Contact = ({ isDarkMode }) => {
                         transition={{ delay: 0.2 }}
                         className="lg:col-span-1 space-y-6"
                     >
-                        <div className={`p-8 rounded-3xl border transition-all duration-300 h-full ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-100 shadow-xl shadow-slate-200/50'}`}>
-                            <h3 className={`text-2xl font-bold mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Office Info</h3>
+                        <div className={`p-6 md:p-8 rounded-3xl border transition-all duration-300 h-full ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-100 shadow-xl shadow-slate-200/50'}`}>
+                            <h3 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Office Info</h3>
 
-                            <div className="space-y-8">
+                            <div className="space-y-6">
                                 <div className="flex gap-4">
                                     <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
                                         <MapPin size={24} />
@@ -118,7 +132,7 @@ const Contact = ({ isDarkMode }) => {
                                     <div>
                                         <h4 className={`font-bold mb-1 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Address</h4>
                                         <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                                            6-1-279, Plot no.10, Mantri Mansion, Walker Town, Padmarao Nagar, Hyderabad, Telangana 500020
+                                            {settings.contact_address || '6-1-279, Plot no.10, Mantri Mansion, Walker Town, Padmarao Nagar, Hyderabad, Telangana 500020'}
                                         </p>
                                     </div>
                                 </div>
@@ -129,7 +143,7 @@ const Contact = ({ isDarkMode }) => {
                                     </div>
                                     <div>
                                         <h4 className={`font-bold mb-1 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Phone</h4>
-                                        <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>+91 73309 33306</p>
+                                        <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{settings.contact_phone || '+91 73309 33306'}</p>
                                     </div>
                                 </div>
 
@@ -139,7 +153,7 @@ const Contact = ({ isDarkMode }) => {
                                     </div>
                                     <div>
                                         <h4 className={`font-bold mb-1 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Email</h4>
-                                        <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>mail@snenviro.com</p>
+                                        <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{settings.contact_email || 'mail@snenviro.com'}</p>
                                     </div>
                                 </div>
 
@@ -165,8 +179,8 @@ const Contact = ({ isDarkMode }) => {
                         transition={{ delay: 0.4 }}
                         className="lg:col-span-2"
                     >
-                        <div className={`p-8 md:p-12 rounded-3xl border transition-all duration-300 ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-100 shadow-xl shadow-slate-200/50'}`}>
-                            <h3 className={`text-2xl font-bold mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Send a Message</h3>
+                        <div className={`p-6 md:p-8 rounded-3xl border transition-all duration-300 ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-100 shadow-xl shadow-slate-200/50'}`}>
+                            <h3 className={`text-xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Send a Message</h3>
 
                             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
@@ -221,7 +235,7 @@ const Contact = ({ isDarkMode }) => {
                                     <button
                                         type="submit"
                                         disabled={status === 'loading'}
-                                        className="w-full md:w-auto px-12 py-4 bg-emerald-500 text-white rounded-2xl font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-500/30 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70"
+                                        className="w-full px-8 py-3 bg-emerald-500 text-white rounded-xl font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-500/30 flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-70"
                                     >
                                         {status === 'loading' ? (
                                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>

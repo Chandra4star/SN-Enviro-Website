@@ -4,15 +4,22 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Hero = ({ isDarkMode }) => {
     const images = [
-        "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&q=70&w=1600", // Forest/Wind Turbine
-        "https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&q=70&w=1600", // Wind Energy
-        "https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?auto=format&fit=crop&q=70&w=1600", // Forest/Mist
-        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=70&w=1600"  // Nature/Landscape
+        "/assets/hero1.jpg",
+        "/assets/hero2.jpg",
+        "/assets/hero3.jpg",
+        "/assets/hero4.jpg"
     ];
 
     const [currentImage, setCurrentImage] = useState(0);
+    const [settings, setSettings] = useState({});
 
     useEffect(() => {
+        // Bypassing settings fetch due to DB issues
+        setSettings({
+            hero_title: 'Your Trusted Partner in Environmental Monitoring Solutions',
+            hero_subtitle: 'Delivering cutting-edge online monitoring systems for air, water, and emissions since 2017. SN Enviro Solutions is a leading system integrator, manufacturer, and supplier.'
+        });
+
         const timer = setInterval(() => {
             setCurrentImage((prev) => (prev + 1) % images.length);
         }, 5000);
@@ -65,8 +72,8 @@ const Hero = ({ isDarkMode }) => {
                         fetchPriority={currentImage === 0 ? "high" : "auto"}
                     />
                 </AnimatePresence>
-                {/* 20% White Overlay for Text Visibility */}
-                <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-900/20' : 'bg-white/40'}`}></div>
+                {/* Responsive overlay: Stronger gradient on mobile for better text contrast */}
+                <div className={`absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r ${isDarkMode ? 'from-slate-900/90 via-slate-900/50 to-transparent' : 'from-white/90 via-white/50 to-transparent'} md:opacity-100 opacity-90`}></div>
             </div>
 
             {/* Content */}
@@ -75,29 +82,28 @@ const Hero = ({ isDarkMode }) => {
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="max-w-4xl"
+                    className={`max-w-4xl mx-auto md:mx-0 text-center md:text-left p-6 md:p-0 rounded-3xl md:bg-transparent backdrop-blur-sm md:backdrop-blur-none ${isDarkMode ? 'bg-slate-900/40 shadow-2xl md:shadow-none border border-slate-800/50 md:border-none' : 'bg-white/40 shadow-2xl md:shadow-none border border-white/50 md:border-none'}`}
                 >
                     <motion.h1
                         variants={itemVariants}
-                        className={`text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-2xl ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
+                        className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-2xl ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
                     >
-                        Your Trusted Partner in <br />
-                        <span className="text-emerald-500">Environmental Monitoring Solutions</span>
+                        {settings.hero_title || 'Your Trusted Partner in Environmental Monitoring Solutions'}
                     </motion.h1>
 
                     <motion.p
                         variants={itemVariants}
-                        className={`text-base md:text-lg lg:text-xl mb-8 md:mb-12 max-w-2xl font-normal leading-relaxed drop-shadow-md ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}
+                        className={`text-base sm:text-lg md:text-xl lg:text-2xl mb-8 md:mb-12 max-w-2xl mx-auto md:mx-0 font-medium leading-relaxed drop-shadow-md ${isDarkMode ? 'text-slate-200' : 'text-slate-700'}`}
                     >
-                        Delivering cutting-edge online monitoring systems for air, water, and emissions since 2017. SN Enviro Solutions is a leading system integrator, manufacturer, and supplier.
+                        {settings.hero_subtitle || 'Delivering cutting-edge online monitoring systems for air, water, and emissions since 2017. SN Enviro Solutions is a leading system integrator, manufacturer, and supplier.'}
                     </motion.p>
 
-                    <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                    <motion.div variants={itemVariants} className="flex flex-col sm:flex-row justify-center md:justify-start gap-4 sm:gap-6">
                         <motion.a
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             href="#products"
-                            className="px-10 py-4 bg-emerald-500 text-white rounded-2xl font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-500/30 text-center no-underline"
+                            className="px-10 py-4 bg-emerald-500 text-white rounded-2xl font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-emerald-500/30 text-center no-underline w-full sm:w-auto"
                         >
                             Our Products
                         </motion.a>
@@ -105,7 +111,7 @@ const Hero = ({ isDarkMode }) => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             href="#contact"
-                            className={`px-10 py-4 border-2 border-emerald-500 text-emerald-500 rounded-2xl font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all text-center no-underline ${isDarkMode ? '' : ''}`}
+                            className={`px-10 py-4 border-2 border-emerald-500 text-emerald-500 rounded-2xl font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all shadow-xl text-center no-underline w-full sm:w-auto ${isDarkMode ? 'bg-slate-900/50' : 'bg-white/50'}`}
                         >
                             Connect with US
                         </motion.a>

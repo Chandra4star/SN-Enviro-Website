@@ -7,7 +7,7 @@ import { Maximize2, ArrowUpRight, Cpu, ShieldCheck, Activity, BarChart } from 'l
 // Core Portfolio Categories based on SN Enviro solutions
 const initialProducts = [
     {
-        id: "698da53e5bff466e7fbecc37",
+        id: "698da53e5bff466e7fbecc3b",
         title: "Continuous Ambient Air Quality Monitoring Stations (CAAQMS)",
         category: "Ambient Monitoring",
         desc: "Complete self-contained stations for precise urban air quality management.",
@@ -19,9 +19,9 @@ const initialProducts = [
         id: "698da53e5bff466e7fbecc39",
         title: "Continuous Emission Monitoring Systems (CEMS)",
         category: "Emission Monitoring",
-        desc: "Regulatory compliance solutions for industrial stack emissions.",
-        detail: "Measures SO2, NOx, CO, CO2, and O2 using UV-DOAS or NDIR technologies.",
-        imageUrl: "/assets/scs_900uv.png",
+        desc: "Continuous Emission Monitoring Systems for stack and flue gas monitoring.",
+        detail: "Provides pinpoint detailing for industrial stack emissions. Accurately measures SO2, NOx, CO, CO2, and O2 levels using high-precision UV-DOAS or NDIR technologies. Ensures 100% regulatory compliance with advanced clean UI analytics.",
+        imageUrl: "/assets/CEMS.jpg",
         icon: "BarChart"
     },
     {
@@ -59,6 +59,15 @@ const initialProducts = [
         detail: "Secure data transmission to central authorities with remote diagnostic capabilities.",
         imageUrl: "/assets/scs_900c.png",
         icon: "ShieldCheck"
+    },
+    {
+        id: "698da53e5bff466e7fbecc43",
+        title: "Advanced Instrumentation",
+        category: "Process Control",
+        desc: "High-precision advanced instrumentation for process control and analytics.",
+        detail: "Comprehensive advanced instrumentation solutions including flow meters, level transmitters, pressure sensors, and analytical instruments for industrial automation.",
+        imageUrl: "/assets/gas_analyzer.jpg",
+        icon: "Activity"
     }
 ];
 
@@ -67,25 +76,9 @@ const ProductPortfolio = ({ isDarkMode }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/products');
-                if (!response.ok) throw new Error('Failed to fetch');
-                const data = await response.json();
-                if (data && data.length > 0) {
-                    setProducts(data);
-                } else {
-                    setProducts(initialProducts);
-                }
-            } catch (err) {
-                // console.error('Error fetching products:', err);
-                setProducts(initialProducts);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProducts();
+        // Bypassing backend fetch due to DB inconsistencies
+        setProducts(initialProducts);
+        setLoading(false);
     }, []);
 
     const getIcon = (iconName) => {
@@ -133,7 +126,7 @@ const ProductPortfolio = ({ isDarkMode }) => {
                             {/* Image Container */}
                             <div className="relative aspect-square w-full p-10 flex items-center justify-center transition-all duration-700 bg-white/50 dark:bg-slate-900/20 group-hover:scale-105">
                                 <img
-                                    src={product.imageUrl || product.image || "/assets/logo.png"}
+                                    src={(product.imageUrl && product.imageUrl.startsWith('uploads/')) ? `http://localhost:5000/${product.imageUrl}` : (product.imageUrl || product.image || "/assets/logo.png")}
                                     alt={product.title}
                                     className="max-h-full max-w-full object-contain filter transition-all duration-700 hover:scale-110"
                                     onError={(e) => {

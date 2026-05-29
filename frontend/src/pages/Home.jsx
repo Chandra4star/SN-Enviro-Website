@@ -5,6 +5,7 @@ import About from '../components/About';
 import Products from '../components/Products';
 import Services from '../components/Services';
 import Clients from '../components/Clients';
+import Gallery from '../components/Gallery';
 import Certifications from '../components/Certifications';
 import Careers from '../components/Careers';
 import Blog from '../components/Blog';
@@ -32,6 +33,7 @@ const Home = ({ isDarkMode }) => {
             <Products isDarkMode={isDarkMode} />
             <Services isDarkMode={isDarkMode} />
             <Clients isDarkMode={isDarkMode} />
+            <Gallery isDarkMode={isDarkMode} />
             <Certifications isDarkMode={isDarkMode} />
             <Careers isDarkMode={isDarkMode} />
             <Blog isDarkMode={isDarkMode} />

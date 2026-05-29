@@ -140,7 +140,7 @@ const Products = ({ isDarkMode }) => {
                                     <h3 className={`text-xl font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{product.title || product.name}</h3>
                                     <p className={`text-sm leading-relaxed line-clamp-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{product.desc}</p>
                                     <div className="mt-6 flex items-center text-emerald-500 text-xs font-bold uppercase tracking-[0.2em] group">
-                                        Learn More <ArrowRight size={14} className="ml-2 transform group-hover:translate-x-2 transition-transform" />
+                                        Read More <ArrowRight size={14} className="ml-2 transform group-hover:translate-x-2 transition-transform" />
                                     </div>
                                 </div>
                             </Link>

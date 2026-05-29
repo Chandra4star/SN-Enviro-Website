@@ -1,25 +1,26 @@
 import express from 'express';
 import multer from 'multer';
-import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import Product from '../models/Product.js';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
-// Cloudinary Config
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-});
+import path from 'path';
+import fs from 'fs';
 
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'sn-enviro-products',
-        allowed_formats: ['jpg', 'png', 'jpeg'],
+// Ensure uploads directory exists
+const uploadDir = 'uploads';
+if (!fs.existsSync(uploadDir)){
+    fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadDir)
     },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
 });
 
 const upload = multer({ storage: storage });
@@ -74,6 +75,30 @@ router.post('/', [auth, upload.single('image')], async (req, res) => {
         res.status(201).json(newProduct);
     } catch (err) {
         res.status(400).json({ message: err.message });
+    }
+});
+
+// PUT update product (Protected)
+router.put('/:id', [auth, upload.single('image')], async (req, res) => {
+    try {
+        let product = await Product.findById(req.params.id);
+        if (!product) return res.status(404).json({ msg: 'Product not found' });
+
+        const updatedFields = {
+            title: req.body.title || product.title,
+            desc: req.body.desc || product.desc,
+            details: req.body.details || product.details,
+            icon: req.body.icon || product.icon,
+        };
+
+        if (req.file) {
+            updatedFields.imageUrl = req.file.path.replace(/\\/g, '/');
+        }
+
+        product = await Product.findByIdAndUpdate(req.params.id, { $set: updatedFields }, { new: true });
+        res.json(product);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 });
 
