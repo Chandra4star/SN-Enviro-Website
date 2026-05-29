@@ -13,6 +13,10 @@ import morgan from 'morgan';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import testimonialRoutes from './routes/testimonialRoutes.js';
+import partnerRoutes from './routes/partnerRoutes.js';
+import galleryRoutes from './routes/galleryRoutes.js';
+import settingRoutes from './routes/settingRoutes.js';
 
 dotenv.config({ path: './server/.env' });
 
@@ -62,9 +66,9 @@ app.use((req, res, next) => {
 // app.use(xss()); // disabling due to Express 5 compatibility issues
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGO_URI || "mongodb+srv://jaswanthavs19_db_user:zF7QRoFn2BlvD544@cluster0.n0sz4ok.mongodb.net/SN_Enviro_DB?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI = process.env.MONGO_URI;
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, { family: 4 })
     .then(() => console.log('✅ Connected to MongoDB Atlas'))
     .catch((err) => console.error('❌ MongoDB Connection Error:', err));
 
@@ -72,6 +76,13 @@ mongoose.connect(MONGODB_URI)
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/partners', partnerRoutes);
+app.use('/api/gallery', galleryRoutes);
+app.use('/api/settings', settingRoutes);
+
+// Serve static uploads
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
     res.send('SN Enviro Backend is running... API at /api/products');
