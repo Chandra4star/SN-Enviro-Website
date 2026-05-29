@@ -153,7 +153,7 @@ const Contact = ({ isDarkMode }) => {
                                     </div>
                                     <div>
                                         <h4 className={`font-bold mb-1 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Email</h4>
-                                        <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{settings.contact_email || 'mail@snenviro.com'}</p>
+                                        <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{settings.contact_email || 'jaswanth.avs19@gmail.com'}</p>
                                     </div>
                                 </div>
 
