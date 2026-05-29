@@ -100,7 +100,7 @@ const Footer = ({ isDarkMode }) => {
                             </div>
                             <div className="flex items-center gap-4 text-slate-400">
                                 <Mail size={20} className="text-emerald-500 shrink-0" />
-                                <p className="text-sm">mail@snenviro.com</p>
+                                <p className="text-sm">jaswanth.avs19@gmail.com</p>
                             </div>
                         </div>
                     </motion.div>
