@@ -275,31 +275,58 @@ const ProductDetails = ({ isDarkMode }) => {
             features: ["Secure real-time data transmission", "Remote calibration and diagnostics", "Automatic data buffering and backfilling", "Multi-protocol conversion"],
             pros: ["Ensures 100% data availability", "Reduces need for site visits", "Secure and encrypted communication"],
             cons: ["Requires reliable cellular signal or internet"]
+        },
+        {
+            _id: "698da53e5bff466e7fbecc43",
+            title: "Advanced Instrumentation",
+            category: "Process Control",
+            desc: "High-precision advanced instrumentation for process control and analytics.",
+            details: "Comprehensive advanced instrumentation solutions including flow meters, level transmitters, pressure sensors, and analytical instruments for industrial automation.",
+            longDescription: "Advanced Instrumentation forms the core of industrial automation and process control. Our portfolio covers a wide range of high-precision sensors and transmitters that ensure the safe, efficient, and reliable operation of manufacturing processes. From accurately measuring fluid flows in pipelines to maintaining critical pressures in boilers, our instruments deliver unparalleled accuracy and longevity.\n\nWe partner with global leaders in sensor technology to provide solutions tailored to specific industry needs, including hazardous area approvals (ATEX/IECEx) and hygienic certifications for food and beverage applications.",
+            operatingPrinciple: "Operating principles vary by instrument type:\n- Flow: Electromagnetic, Coriolis Mass, or Ultrasonic transit-time.\n- Level: Radar (FMCW/Guided Wave), Ultrasonic, or Capacitance.\n- Pressure: Piezoresistive or Capacitive ceramic cells.\n- Analytics: Optical, Electrochemical, or Paramagnetic sensors.",
+            applications: [
+                "Oil & Gas Refineries",
+                "Chemical and Petrochemical Plants",
+                "Food & Beverage Processing",
+                "Water and Wastewater Treatment",
+                "Pharmaceutical Manufacturing"
+            ],
+            installation: "Installation depends on the specific instrument. Flow meters typically require flanged pipeline integration with specific upstream/downstream straight pipe runs. Level transmitters are mounted on tank roofs via standard nozzles. All instruments require proper grounding and shielded signal cables (usually 4-20mA HART or Profibus/Foundation Fieldbus).",
+            faqs: [
+                {
+                    question: "What communication protocols are supported?",
+                    answer: "Our instruments support standard 4-20mA with HART protocol, as well as digital fieldbuses like Profibus PA/DP, Foundation Fieldbus, and Modbus RTU/TCP."
+                },
+                {
+                    question: "Are these instruments suitable for hazardous areas?",
+                    answer: "Yes, many of our instruments come with intrinsically safe (Ex ia) or explosion-proof (Ex d) certifications for use in Zone 1 and Zone 2 hazardous areas."
+                }
+            ],
+            technicalSpecs: [
+                { label: "Output Signals", value: "4-20mA HART, Profibus, Modbus" },
+                { label: "Accuracy", value: "Typically up to ±0.1% of reading" },
+                { label: "Enclosure Rating", value: "IP66 / IP67 / IP68" },
+                { label: "Wetted Materials", value: "SS316L, Hastelloy, PTFE, Ceramic" },
+                { label: "Certifications", value: "ATEX, IECEx, SIL2/SIL3" }
+            ],
+            compliance: "ISO 9001, OIML, ATEX/IECEx for hazardous areas.",
+            imageUrl: "/assets/gas_analyzer.jpg",
+            features: ["High measurement accuracy and repeatability", "Robust design for harsh environments", "Advanced diagnostics and self-monitoring", "Wide range of wetted materials"],
+            pros: ["Improves process efficiency and safety", "Reduces downtime through predictive diagnostics", "Seamless integration into existing DCS/PLC"],
+            cons: ["Requires skilled technicians for configuration"]
         }
     ];
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await fetch(`http://localhost:5000/api/products/${id}`);
-                if (!response.ok) throw new Error('Product not found in API');
-                const data = await response.json();
-                setProduct(data);
-            } catch (err) {
-                console.warn("API fetch failed, falling back to local data:", err);
-                const localProduct = defaultProductList.find(p => p._id === id);
-                if (localProduct) {
-                    setProduct(localProduct);
-                    setError(null);
-                } else {
-                    setError('Product not found');
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProduct();
+        // Bypassing backend fetch to resolve loading issues and DB inconsistencies
+        const localProduct = defaultProductList.find(p => p._id === id);
+        if (localProduct) {
+            setProduct(localProduct);
+            setError(null);
+        } else {
+            setError('Product not found');
+        }
+        setLoading(false);
     }, [id]);
 
     if (loading) return (
@@ -318,8 +345,8 @@ const ProductDetails = ({ isDarkMode }) => {
     );
 
     return (
-        <div className={`pt-24 min-h-screen ${isDarkMode ? 'bg-slate-900 text-white' : 'bg-gray-50 text-slate-900'}`}>
-            <div className="container mx-auto px-6 py-12">
+        <div className={`pt-24 min-h-screen relative overflow-hidden ${isDarkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}>
+            <div className="container mx-auto px-6 py-12 relative z-10">
                 <Link to="/#products" className="inline-flex items-center gap-2 text-emerald-500 font-bold mb-8 hover:opacity-80 transition-opacity">
                     <ArrowLeft size={20} /> Back to Products
                 </Link>
@@ -332,7 +359,7 @@ const ProductDetails = ({ isDarkMode }) => {
                         className={`rounded-3xl p-8 flex items-center justify-center ${isDarkMode ? 'bg-slate-800' : 'bg-white shadow-xl'}`}
                     >
                         <img
-                            src={product.imageUrl || product.image || "/assets/logo.png"}
+                            src={(product.imageUrl && product.imageUrl.startsWith('uploads/')) ? `http://localhost:5000/${product.imageUrl}` : (product.imageUrl || product.image || "/assets/logo.png")}
                             alt={product.title}
                             className="max-w-full max-h-[500px] object-contain"
                             onError={(e) => {
@@ -395,20 +422,13 @@ const ProductDetails = ({ isDarkMode }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="relative"
+                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
                             >
-                                <div className="flex items-start gap-6">
-                                    <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shrink-0">
-                                        <FileText size={32} />
-                                    </div>
-                                    <div>
-                                        <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Detailed Description</h3>
-                                        <div className={`prose max-w-none ${isDarkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
-                                            {product.longDescription.split('\n\n').map((paragraph, idx) => (
-                                                <p key={idx} className="mb-4 leading-relaxed text-lg">{paragraph}</p>
-                                            ))}
-                                        </div>
-                                    </div>
+                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Overview</h3>
+                                <div className={`prose max-w-none ${isDarkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
+                                    {product.longDescription.split('\n\n').map((paragraph, idx) => (
+                                        <p key={idx} className="mb-4 leading-relaxed text-lg font-light">{paragraph}</p>
+                                    ))}
                                 </div>
                             </motion.section>
                         )}
@@ -419,19 +439,12 @@ const ProductDetails = ({ isDarkMode }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="relative"
+                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
                             >
-                                <div className="flex items-start gap-6">
-                                    <div className="p-3 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 shrink-0">
-                                        <Layers size={32} />
-                                    </div>
-                                    <div>
-                                        <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Operating Principle</h3>
-                                        <p className={`text-lg leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                                            {product.operatingPrinciple}
-                                        </p>
-                                    </div>
-                                </div>
+                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Operating Principle</h3>
+                                <p className={`text-lg leading-relaxed font-light ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                    {product.operatingPrinciple}
+                                </p>
                             </motion.section>
                         )}
 
@@ -441,24 +454,17 @@ const ProductDetails = ({ isDarkMode }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="relative"
+                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
                             >
-                                <div className="flex items-start gap-6">
-                                    <div className="p-3 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 shrink-0">
-                                        <Zap size={32} />
-                                    </div>
-                                    <div>
-                                        <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Ideal Applications</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {product.applications.map((app, idx) => (
-                                                <div key={idx} className={`p-4 rounded-lg flex items-center gap-3 ${isDarkMode ? 'bg-slate-800' : 'bg-slate-50 border border-slate-200'}`}>
-                                                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
-                                                    <span className={`font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{app}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Applications & Use Cases</h3>
+                                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {product.applications.map((app, idx) => (
+                                        <li key={idx} className="flex items-center gap-3">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                            <span className={`text-lg font-light ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{app}</span>
+                                        </li>
+                                    ))}
+                                </ul>
                             </motion.section>
                         )}
 
@@ -468,19 +474,12 @@ const ProductDetails = ({ isDarkMode }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="relative"
+                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
                             >
-                                <div className="flex items-start gap-6">
-                                    <div className="p-3 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 shrink-0">
-                                        <Wrench size={32} />
-                                    </div>
-                                    <div>
-                                        <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Installation & Commissioning</h3>
-                                        <p className={`text-lg leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                                            {product.installation}
-                                        </p>
-                                    </div>
-                                </div>
+                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Installation & Commissioning</h3>
+                                <p className={`text-lg leading-relaxed font-light ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                    {product.installation}
+                                </p>
                             </motion.section>
                         )}
 
@@ -490,27 +489,16 @@ const ProductDetails = ({ isDarkMode }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="relative"
+                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
                             >
-                                <div className="flex items-start gap-6">
-                                    <div className="p-3 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 shrink-0">
-                                        <Settings size={32} />
-                                    </div>
-                                    <div>
-                                        <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Technical Specifications</h3>
-                                        <div className={`overflow-hidden rounded-xl border ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}>
-                                            <table className="w-full text-left">
-                                                <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
-                                                    {product.technicalSpecs.map((spec, idx) => (
-                                                        <tr key={idx} className={`${idx % 2 === 0 ? (isDarkMode ? 'bg-slate-800/50' : 'bg-slate-50') : (isDarkMode ? 'bg-slate-900' : 'bg-white')}`}>
-                                                            <td className={`p-4 font-semibold w-1/3 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{spec.label}</td>
-                                                            <td className={`p-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{spec.value}</td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
+                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Technical Specifications</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12">
+                                    {product.technicalSpecs.map((spec, idx) => (
+                                        <div key={idx} className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-800/50">
+                                            <span className={`font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{spec.label}</span>
+                                            <span className={`text-sm text-right ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{spec.value}</span>
                                         </div>
-                                    </div>
+                                    ))}
                                 </div>
                             </motion.section>
                         )}
@@ -521,12 +509,12 @@ const ProductDetails = ({ isDarkMode }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className={`mt-12 p-6 rounded-2xl flex items-center gap-6 ${isDarkMode ? 'bg-slate-800 border border-slate-700' : 'bg-slate-100 border border-slate-200'}`}
+                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
                             >
-                                <Info className="hidden sm:block text-emerald-500 shrink-0" size={40} />
-                                <div>
-                                    <h4 className={`text-lg font-bold mb-2 uppercase tracking-wider ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Regulatory Compliance</h4>
-                                    <p className={`${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{product.compliance}</p>
+                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Regulatory Compliance</h3>
+                                <div className="flex items-start gap-4">
+                                    <CheckCircle className="text-emerald-500 shrink-0 mt-1" size={24} />
+                                    <p className={`text-lg font-light ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{product.compliance}</p>
                                 </div>
                             </motion.section>
                         )}
@@ -537,74 +525,56 @@ const ProductDetails = ({ isDarkMode }) => {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="relative"
+                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
                             >
-                                <div className="flex items-start gap-6">
-                                    <div className="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 shrink-0">
-                                        <HelpCircle size={32} />
-                                    </div>
-                                    <div className="w-full">
-                                        <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Frequently Asked Questions</h3>
-                                        <div className="space-y-4">
-                                            {product.faqs.map((faq, idx) => (
-                                                <div key={idx} className={`p-6 rounded-2xl ${isDarkMode ? 'bg-slate-800' : 'bg-slate-50'}`}>
-                                                    <h4 className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{faq.question}</h4>
-                                                    <p className={`${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{faq.answer}</p>
-                                                </div>
-                                            ))}
+                                <h3 className={`text-2xl font-semibold mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Frequently Asked Questions</h3>
+                                <div className="space-y-8">
+                                    {product.faqs.map((faq, idx) => (
+                                        <div key={idx}>
+                                            <h4 className={`text-lg font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{faq.question}</h4>
+                                            <p className={`text-base font-light leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{faq.answer}</p>
                                         </div>
-                                    </div>
+                                    ))}
                                 </div>
                             </motion.section>
                         )}
 
-                        {/* 8. Pros and Cons */}
+                        {/* 8. Pros & Cons */}
                         {((product.pros && product.pros.length > 0) || (product.cons && product.cons.length > 0)) && (
                             <motion.section
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="relative"
+                                className="pb-16"
                             >
-                                <div className="flex items-start gap-6">
-                                    <div className="p-3 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 shrink-0">
-                                        <CheckCircle size={32} />
-                                    </div>
-                                    <div className="w-full">
-                                        <h3 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Pros & Cons</h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                            {product.pros && product.pros.length > 0 && (
-                                                <div className={`p-6 rounded-2xl ${isDarkMode ? 'bg-emerald-900/10 border border-emerald-500/20' : 'bg-emerald-50 border border-emerald-100'}`}>
-                                                    <h3 className="text-emerald-500 font-bold mb-4 flex items-center gap-2">
-                                                        <CheckCircle size={20} /> Pros
-                                                    </h3>
-                                                    <ul className="space-y-3">
-                                                        {product.pros.map((pro, index) => (
-                                                            <li key={index} className="flex items-start gap-2 text-sm">
-                                                                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
-                                                                <span className={isDarkMode ? 'text-slate-300' : 'text-slate-700'}>{pro}</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            )}
-                                            {product.cons && product.cons.length > 0 && (
-                                                <div className={`p-6 rounded-2xl ${isDarkMode ? 'bg-red-900/10 border border-red-500/20' : 'bg-red-50 border border-red-100'}`}>
-                                                    <h3 className="text-red-500 font-bold mb-4 flex items-center gap-2">
-                                                        <XCircle size={20} /> Cons
-                                                    </h3>
-                                                    <ul className="space-y-3">
-                                                        {product.cons.map((con, index) => (
-                                                            <li key={index} className="flex items-start gap-2 text-sm">
-                                                                <span className="mt-1 w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                                                                <span className={isDarkMode ? 'text-slate-300' : 'text-slate-700'}>{con}</span>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </div>
-                                            )}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                                    {product.pros && product.pros.length > 0 && (
+                                        <div>
+                                            <h3 className="text-emerald-500 font-semibold text-xl mb-6">Advantages</h3>
+                                            <ul className="space-y-4">
+                                                {product.pros.map((pro, index) => (
+                                                    <li key={index} className="flex items-start gap-3">
+                                                        <CheckCircle size={20} className="text-emerald-500 mt-1 shrink-0" />
+                                                        <span className={`font-light ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{pro}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
-                                    </div>
+                                    )}
+
+                                    {product.cons && product.cons.length > 0 && (
+                                        <div>
+                                            <h3 className="text-slate-500 font-semibold text-xl mb-6">Considerations</h3>
+                                            <ul className="space-y-4">
+                                                {product.cons.map((con, index) => (
+                                                    <li key={index} className="flex items-start gap-3">
+                                                        <XCircle size={20} className="text-slate-400 mt-1 shrink-0" />
+                                                        <span className={`font-light ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{con}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
                                 </div>
                             </motion.section>
                         )}

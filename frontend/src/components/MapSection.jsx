@@ -62,10 +62,10 @@ const MapSection = ({ isDarkMode }) => {
                     </p>
                 </div>
 
-                <div className="flex flex-col lg:flex-row h-[600px] rounded-[3rem] overflow-hidden border shadow-2xl border-transparent group">
+                <div className="flex flex-col lg:flex-row h-[400px] rounded-3xl overflow-hidden border shadow-xl border-transparent group">
                     {/* Sidebar */}
-                    <div className={`w-full lg:w-96 overflow-y-auto z-10 p-6 flex flex-col gap-4 border-r transition-colors duration-500 ${isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200'} backdrop-blur-md`}>
-                        <h3 className={`text-xl font-bold mb-2 flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    <div className={`w-full lg:w-80 overflow-y-auto z-10 p-5 flex flex-col gap-3 border-r transition-colors duration-500 ${isDarkMode ? 'bg-slate-900/90 border-slate-800' : 'bg-white/90 border-slate-200'} backdrop-blur-md`}>
+                        <h3 className={`text-lg font-bold mb-1 flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                             <Building2 size={20} className="text-emerald-500" />
                             Branch Locations
                         </h3>

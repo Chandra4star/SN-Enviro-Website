@@ -46,30 +46,29 @@ const Blog = ({ isDarkMode }) => {
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
                             whileHover={{ y: -10 }}
-                            className={`group cursor-pointer rounded-[2.5rem] overflow-hidden border transition-all duration-300 ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-100 hover:shadow-2xl'}`}
+                            className={`group rounded-[2.5rem] overflow-hidden border transition-all duration-300 ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-100 hover:shadow-2xl'}`}
                         >
-                            <div className="relative h-60 overflow-hidden">
-                                <img src={post.img} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                <div className="absolute top-6 left-6 px-4 py-2 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full">
-                                    {post.category}
+                            <a href={post.url} target="_blank" rel="noopener noreferrer" className="block w-full h-full no-underline">
+                                <div className="relative h-60 overflow-hidden">
+                                    <img src={post.img} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                    <div className="absolute top-6 left-6 px-4 py-2 bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full">
+                                        {post.category}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="p-8">
-                                <div className="flex items-center gap-2 text-slate-400 text-xs mb-4">
-                                    <Calendar size={14} /> {post.date}
+                                <div className="p-8">
+                                    <div className="flex items-center gap-2 text-slate-400 text-xs mb-4">
+                                        <Calendar size={14} /> {post.date}
+                                    </div>
+                                    <h3 className={`text-xl font-bold mb-6 leading-tight group-hover:text-emerald-500 transition-colors ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                        {post.title}
+                                    </h3>
+                                    <div
+                                        className="flex items-center text-emerald-500 text-xs font-bold uppercase tracking-widest no-underline hover:text-emerald-600"
+                                    >
+                                        Read Article <ArrowRight size={14} className="ml-2 group-hover:translate-x-2 transition-transform" />
+                                    </div>
                                 </div>
-                                <h3 className={`text-xl font-bold mb-6 leading-tight group-hover:text-emerald-500 transition-colors ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                                    {post.title}
-                                </h3>
-                                <a
-                                    href={post.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center text-emerald-500 text-xs font-bold uppercase tracking-widest no-underline hover:text-emerald-600"
-                                >
-                                    Read Article <ArrowRight size={14} className="ml-2 group-hover:translate-x-2 transition-transform" />
-                                </a>
-                            </div>
+                            </a>
                         </motion.article>
                     ))}
                 </div>

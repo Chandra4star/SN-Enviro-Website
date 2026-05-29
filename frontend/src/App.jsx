@@ -4,11 +4,12 @@ import './App.css';
 import './index.css';
 
 // Importing Modular Components from FLAT structure
-import Header from './components/Header';
-import Footer from './components/Footer';
 import PartnerPortal from './components/PartnerPortal';
-import ChatBotComponent from './components/ChatBotComponent';
 import ErrorBoundary from './components/ErrorBoundary';
+
+// Layouts & Routes
+import PublicLayout from './layouts/PublicLayout';
+import AdminRoutes from './routes/AdminRoutes';
 
 // Lazy Load Pages
 const Home = lazy(() => import('./pages/Home'));
@@ -41,20 +42,24 @@ function App() {
       <Router>
         <div className={`flex flex-col min-h-screen transition-colors duration-500 ${isDarkMode ? 'bg-slate-900 text-slate-200' : 'bg-white text-slate-900'}`}>
 
-          <Header
-            isDarkMode={isDarkMode}
-            toggleTheme={toggleTheme}
-            onOpenPartnerPortal={() => setIsPortalOpen(true)}
-          />
-
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
-              <Route path="/" element={<Home isDarkMode={isDarkMode} />} />
-              <Route path="/product/:id" element={<ProductDetails isDarkMode={isDarkMode} />} />
+              {/* Public Routes - Wrapped in PublicLayout */}
+              <Route path="/" element={
+                <PublicLayout isDarkMode={isDarkMode} toggleTheme={toggleTheme} onOpenPartnerPortal={() => setIsPortalOpen(true)}>
+                  <Home isDarkMode={isDarkMode} />
+                </PublicLayout>
+              } />
+              <Route path="/product/:id" element={
+                <PublicLayout isDarkMode={isDarkMode} toggleTheme={toggleTheme} onOpenPartnerPortal={() => setIsPortalOpen(true)}>
+                  <ProductDetails isDarkMode={isDarkMode} />
+                </PublicLayout>
+              } />
+
+              {/* Admin Routes - Handled entirely by AdminRoutes */}
+              <Route path="/admin/*" element={<AdminRoutes isDarkMode={isDarkMode} />} />
             </Routes>
           </Suspense>
-
-          <Footer isDarkMode={isDarkMode} />
 
           {/* Partner Portal Modal */}
           <PartnerPortal
@@ -62,8 +67,6 @@ function App() {
             onClose={() => setIsPortalOpen(false)}
             isDarkMode={isDarkMode}
           />
-
-          <ChatBotComponent />
 
         </div>
       </Router>

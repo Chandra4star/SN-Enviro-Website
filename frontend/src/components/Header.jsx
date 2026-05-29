@@ -20,23 +20,20 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
             name: 'Products',
             href: '#products',
             dropdown: [
-                {
-                    name: 'CAAQMS',
-                    subItems: [
-                        { name: 'CAAQSM Systems', href: '#caaqms-systems' },
-                        { name: 'CAAQMS Products', href: '#caaqms-products' }
-                    ]
-                },
-                { name: 'CEMS', href: '#cems' },
-                { name: 'EQMS', href: '#eqms' },
-                { name: 'IoT based data logger', href: '#iot-logger' }
+                { name: 'Continuous Ambient Air Quality Monitoring Stations', href: '/product/698da53e5bff466e7fbecc3b' },
+                { name: 'Continuous Emission Monitoring Systems', href: '/product/698da53e5bff466e7fbecc39' },
+                { name: 'Effluent Quality Monitoring Systems', href: '/product/698da53e5bff466e7fbecc40' },
+                { name: 'IIoT-based Data Loggers & Remote Calibration Units', href: '/product/698da53e5bff466e7fbecc38' },
+                { name: 'Weather Monitoring Systems (WMS)', href: '/product/698da53e5bff466e7fbecc41' },
+                { name: 'Smart City Environmental Monitoring', href: '/product/698da53e5bff466e7fbecc42' },
+                { name: 'Advanced Instrumentation', href: '/product/698da53e5bff466e7fbecc43' }
             ]
         },
-        { name: 'Services', href: '#services' },
-        { name: 'Clients', href: '#clients' },
-        { name: 'Blog', href: '#blog' },
-        { name: 'About', href: '#about' },
-        { name: 'Contact', href: '#contact' },
+        { name: 'Services', href: '/#services' },
+        { name: 'Clients', href: '/#clients' },
+        { name: 'About', href: '/#about' },
+        { name: 'Contact', href: '/#contact' },
+        { name: 'Admin Portal', href: '/admin' },
     ];
 
     return (
@@ -58,12 +55,9 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
                             alt="SN ENVIRO Logo"
                         />
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col justify-center">
                         <span className={`text-xl md:text-2xl font-serif tracking-wide leading-none ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                             SN ENVIRO
-                        </span>
-                        <span className={`text-[10px] font-bold tracking-[0.3em] uppercase ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
-                            Solutions & Services Pvt. Ltd.
                         </span>
                     </div>
                 </a>
@@ -141,25 +135,6 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
                         >
                             {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
                         </button>
-
-                        <button
-                            onClick={onOpenPartnerPortal}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all active:scale-95 ${isDarkMode
-                                ? 'bg-slate-800 text-white border border-slate-700 hover:bg-slate-700'
-                                : 'bg-slate-50 text-slate-900 border border-slate-200 hover:bg-slate-200 shadow-sm'
-                                }`}
-                        >
-                            <User size={16} />
-                            Partner Login
-                        </button>
-
-                        <a
-                            href="#contact"
-                            className="bg-emerald-500 text-white px-6 py-2.5 rounded-full text-sm font-bold no-underline hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 active:scale-95 transition-all flex items-center gap-2 group"
-                        >
-                            Get Quote
-                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                        </a>
                     </div>
                 </nav>
 
@@ -243,21 +218,6 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
                     </div>
 
                     <div className="mt-12 pt-12 border-t border-slate-100 dark:border-slate-800 space-y-4">
-                        <button
-                            onClick={onOpenPartnerPortal}
-                            className="w-full flex items-center justify-center gap-3 py-4 bg-emerald-500/10 text-emerald-500 rounded-2xl font-bold"
-                        >
-                            <User size={20} />
-                            Partner Access
-                        </button>
-                        <a
-                            href="#contact"
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="w-full flex items-center justify-center gap-3 py-4 bg-emerald-500 text-white rounded-2xl font-bold no-underline shadow-lg shadow-emerald-500/20"
-                        >
-                            Get Quote
-                            <ArrowRight size={20} />
-                        </a>
                         <button
                             onClick={toggleTheme}
                             className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl font-bold ${isDarkMode ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-900'}`}
