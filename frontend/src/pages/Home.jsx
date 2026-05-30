@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Hero from '../components/Hero';
 import About from '../components/About';
+import Team from '../components/Team';
 import Products from '../components/Products';
 import Services from '../components/Services';
 import Clients from '../components/Clients';
@@ -30,6 +31,7 @@ const Home = ({ isDarkMode }) => {
         <main className="flex-grow">
             <Hero isDarkMode={isDarkMode} />
             <About isDarkMode={isDarkMode} />
+            <Team isDarkMode={isDarkMode} />
             <Products isDarkMode={isDarkMode} />
             <Services isDarkMode={isDarkMode} />
             <Clients isDarkMode={isDarkMode} />
