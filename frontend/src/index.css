@@ -15,10 +15,16 @@
   --slate-200: #e2e8f0;
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  position: relative;
 }
 
 h1,
