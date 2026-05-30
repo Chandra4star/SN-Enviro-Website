@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import RollingText from './RollingText';
 
 const Hero = ({ isDarkMode }) => {
     const images = [
@@ -84,16 +85,28 @@ const Hero = ({ isDarkMode }) => {
                     animate="visible"
                     className={`max-w-4xl mx-auto md:mx-0 text-center md:text-left p-6 md:p-0 rounded-3xl md:bg-transparent backdrop-blur-sm md:backdrop-blur-none ${isDarkMode ? 'bg-slate-900/40 shadow-2xl md:shadow-none border border-slate-800/50 md:border-none' : 'bg-white/40 shadow-2xl md:shadow-none border border-white/50 md:border-none'}`}
                 >
-                    <motion.h1
-                        variants={itemVariants}
-                        className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight tracking-tight drop-shadow-2xl ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
-                    >
-                        {settings.hero_title || 'Your Trusted Partner in Environmental Monitoring Solutions'}
-                    </motion.h1>
+                    <motion.div variants={itemVariants} className="mb-6 min-h-[150px] sm:min-h-[180px] md:min-h-[200px] lg:min-h-[260px] flex flex-col justify-center">
+                        <RollingText
+                            texts={[
+                                { 
+                                    text: "Your Trusted Partner in Environmental Monitoring Solutions",
+                                    className: "text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold"
+                                },
+                                {
+                                    text: "SN Enviro Solutions, SN Enviro Services, and SN Enviro India Private Limited",
+                                    className: "text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-emerald-500"
+                                }
+                            ]}
+                            className={`leading-tight tracking-tight drop-shadow-2xl ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
+                            rollDuration={1.2}
+                            staggerDelay={0.06}
+                            pauseDuration={4500}
+                        />
+                    </motion.div>
 
                     <motion.p
                         variants={itemVariants}
-                        className={`text-base sm:text-lg md:text-xl lg:text-2xl mb-8 md:mb-12 max-w-2xl mx-auto md:mx-0 font-medium leading-relaxed drop-shadow-md ${isDarkMode ? 'text-slate-200' : 'text-slate-700'}`}
+                        className={`text-sm sm:text-lg md:text-xl lg:text-2xl mb-8 md:mb-12 max-w-2xl mx-auto md:mx-0 font-medium leading-relaxed drop-shadow-md ${isDarkMode ? 'text-slate-200' : 'text-slate-700'}`}
                     >
                         {settings.hero_subtitle || 'Delivering cutting-edge online monitoring systems for air, water, and emissions since 2017. SN Enviro Solutions is a leading system integrator, manufacturer, and supplier.'}
                     </motion.p>

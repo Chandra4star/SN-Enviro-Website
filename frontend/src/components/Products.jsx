@@ -58,19 +58,7 @@ const Products = ({ isDarkMode }) => {
     ];
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/products')
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.length > 0) {
-                    setProducts(data);
-                } else {
-                    setProducts(defaultProductList);
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-                setProducts(defaultProductList);
-            });
+        setProducts(defaultProductList);
     }, []);
 
     const containerVariants = {

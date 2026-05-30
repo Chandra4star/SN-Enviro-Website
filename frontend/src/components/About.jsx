@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import AnimatedCounter from './AnimatedCounter';
 
 const About = ({ isDarkMode }) => {
     const [settings, setSettings] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/settings')
-            .then(res => res.json())
-            .then(data => setSettings(data))
-            .catch(err => console.error("Failed to fetch settings:", err));
+        setSettings({});
     }, []);
 
     const aboutText = settings?.about_text || "Founded in January 2017 by a team of seasoned technocrats with over **100 years of combined experience**, SN Enviro Solutions has become a trusted name in online environmental monitoring solutions.";
@@ -40,7 +38,7 @@ const About = ({ isDarkMode }) => {
                         {/* Stats Floating box */}
                         <div className={`absolute -bottom-8 -right-8 p-8 rounded-2xl shadow-2xl hidden md:block border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-100'}`}>
                             <div className="flex items-center gap-4 mb-4">
-                                <span className="text-4xl font-extrabold text-emerald-500">300+</span>
+                                <span className="text-4xl font-extrabold text-emerald-500"><AnimatedCounter from={0} to={300} duration={2.5} />+</span>
                                 <span className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Projects <br /> Executed</span>
                             </div>
                             <div className="h-1 w-full bg-emerald-500/20 rounded-full overflow-hidden">
@@ -86,7 +84,7 @@ const About = ({ isDarkMode }) => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className={`p-6 rounded-2xl transition-all duration-300 border ${isDarkMode ? 'bg-slate-800/50 border-slate-700 hover:bg-slate-800' : 'bg-slate-50 border-slate-100 hover:bg-white hover:shadow-xl'}`}>
-                                <h4 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>100+ Years</h4>
+                                <h4 className={`text-xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}><AnimatedCounter from={0} to={100} duration={2.5} />+ Years</h4>
                                 <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Combined team experience in environmental technocracy.</p>
                             </div>
                             <div className={`p-6 rounded-2xl transition-all duration-300 border ${isDarkMode ? 'bg-slate-800/50 border-slate-700 hover:bg-slate-800' : 'bg-slate-50 border-slate-100 hover:bg-white hover:shadow-xl'}`}>
