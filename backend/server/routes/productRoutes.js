@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import Product from '../models/Product.js';
-import jwt from 'jsonwebtoken';
+import { adminAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -25,19 +25,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Auth Middleware
-const auth = (req, res, next) => {
-    const token = req.header('x-auth-token');
-    if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (e) {
-        res.status(400).json({ msg: 'Token is not valid' });
-    }
-};
+// Auth Middleware imported centrally as adminAuth
 
 // GET all products
 router.get('/', async (req, res) => {
@@ -61,7 +49,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST new product (Protected)
-router.post('/', [auth, upload.single('image')], async (req, res) => {
+router.post('/', [adminAuth, upload.single('image')], async (req, res) => {
     const product = new Product({
         title: req.body.title,
         desc: req.body.desc,
@@ -79,7 +67,7 @@ router.post('/', [auth, upload.single('image')], async (req, res) => {
 });
 
 // PUT update product (Protected)
-router.put('/:id', [auth, upload.single('image')], async (req, res) => {
+router.put('/:id', [adminAuth, upload.single('image')], async (req, res) => {
     try {
         let product = await Product.findById(req.params.id);
         if (!product) return res.status(404).json({ msg: 'Product not found' });
@@ -103,7 +91,7 @@ router.put('/:id', [auth, upload.single('image')], async (req, res) => {
 });
 
 // DELETE product (Protected)
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', adminAuth, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) return res.status(404).json({ msg: 'Product not found' });

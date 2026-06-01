@@ -93,7 +93,7 @@ const AdminGallery = ({ isDarkMode }) => {
                     <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Manage website media</p>
                 </div>
                 {!showForm && (
-                    <button onClick={() => setShowForm(true)} className="bg-[#f7b751] hover:bg-orange-500 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors">
+                    <button onClick={() => setShowForm(true)} className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors cursor-pointer">
                         <Plus size={20} /> Add Image
                     </button>
                 )}
@@ -103,17 +103,17 @@ const AdminGallery = ({ isDarkMode }) => {
                 <div className={`p-6 rounded-2xl shadow-sm border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
                     <div className="flex justify-between items-center mb-6 border-b pb-4 dark:border-slate-700">
                         <h2 className="text-xl font-bold">{editingItem ? 'Edit Image' : 'Add New Image'}</h2>
-                        <button onClick={resetForm} className="text-slate-400 hover:text-red-500"><X size={24} /></button>
+                        <button onClick={resetForm} className="text-slate-400 hover:text-red-500 transition-colors"><X size={24} /></button>
                     </div>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Image Title</label>
-                                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none`} required />
+                                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} required />
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Category</label>
-                                <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none`} />
+                                <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} />
                             </div>
                         </div>
                         <div>
@@ -121,8 +121,8 @@ const AdminGallery = ({ isDarkMode }) => {
                             <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} className={`w-full p-2 text-sm rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'}`} />
                         </div>
                         <div className="flex gap-3 pt-4">
-                            <button type="submit" className="bg-[#f7b751] hover:bg-orange-500 text-white px-6 py-2.5 rounded-xl font-medium">Save Image</button>
-                            <button type="button" onClick={resetForm} className={`px-6 py-2.5 rounded-xl font-medium ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`}>Cancel</button>
+                            <button type="submit" className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-medium cursor-pointer">Save Image</button>
+                            <button type="button" onClick={resetForm} className={`px-6 py-2.5 rounded-xl font-medium transition-colors ${isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-slate-200 hover:bg-slate-300 text-slate-800'}`}>Cancel</button>
                         </div>
                     </form>
                 </div>

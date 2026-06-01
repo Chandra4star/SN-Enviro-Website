@@ -17,6 +17,9 @@ import testimonialRoutes from './routes/testimonialRoutes.js';
 import partnerRoutes from './routes/partnerRoutes.js';
 import galleryRoutes from './routes/galleryRoutes.js';
 import settingRoutes from './routes/settingRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import visitRoutes from './routes/visitRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 
 dotenv.config({ path: './server/.env' });
 
@@ -82,6 +85,9 @@ app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/partners', partnerRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/settings', settingRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/visits', visitRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Serve static uploads
 app.use('/uploads', express.static('uploads'));
@@ -90,17 +96,7 @@ app.get('/', (req, res) => {
     res.send('SN Enviro Backend is running... API at /api/products');
 });
 
-// Admin Login Simulation (for demo purposes as requested)
-app.post('/api/admin/login', (req, res) => {
-    const { email, password } = req.body;
-    // VERY simple check for demonstration
-    if (email === ' ' && password === 'admin123') {
-        const token = jwt.sign({ id: 'admin' }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
-        res.json({ token });
-    } else {
-        res.status(400).json({ msg: 'Invalid credentials' });
-    }
-});
+// Admin routes are now mounted centrally in /api/admin
 
 // Global Error Handler
 app.use((err, req, res, next) => {

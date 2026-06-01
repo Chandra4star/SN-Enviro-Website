@@ -69,11 +69,11 @@ const AdminSettings = ({ isDarkMode }) => {
                     <h2 className="text-lg font-bold border-b pb-2 dark:border-slate-700">Home Page Hero Section</h2>
                     <div>
                         <label className="block mb-1 text-sm font-medium">Hero Title</label>
-                        <input type="text" name="hero_title" value={settings.hero_title || ''} onChange={handleChange} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} />
+                        <input type="text" name="hero_title" value={settings.hero_title || ''} onChange={handleChange} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} />
                     </div>
                     <div>
                         <label className="block mb-1 text-sm font-medium">Hero Subtitle</label>
-                        <textarea name="hero_subtitle" value={settings.hero_subtitle || ''} onChange={handleChange} rows="2" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} />
+                        <textarea name="hero_subtitle" value={settings.hero_subtitle || ''} onChange={handleChange} rows="2" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} />
                     </div>
                 </div>
 
@@ -83,21 +83,21 @@ const AdminSettings = ({ isDarkMode }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block mb-1 text-sm font-medium">Contact Email</label>
-                            <input type="email" name="contact_email" value={settings.contact_email || ''} onChange={handleChange} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} />
+                            <input type="email" name="contact_email" value={settings.contact_email || ''} onChange={handleChange} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} />
                         </div>
                         <div>
                             <label className="block mb-1 text-sm font-medium">Contact Phone</label>
-                            <input type="text" name="contact_phone" value={settings.contact_phone || ''} onChange={handleChange} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} />
+                            <input type="text" name="contact_phone" value={settings.contact_phone || ''} onChange={handleChange} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} />
                         </div>
                     </div>
                     <div>
                         <label className="block mb-1 text-sm font-medium">Office Address</label>
-                        <textarea name="contact_address" value={settings.contact_address || ''} onChange={handleChange} rows="2" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} />
+                        <textarea name="contact_address" value={settings.contact_address || ''} onChange={handleChange} rows="2" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} />
                     </div>
                 </div>
 
                 <div className="pt-4 flex justify-end">
-                    <button type="submit" disabled={saving} className="bg-[#5f41e4] hover:bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 transition-colors disabled:opacity-50">
+                    <button type="submit" disabled={saving} className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2 transition-colors disabled:opacity-50 cursor-pointer">
                         <Save size={20} />
                         {saving ? 'Saving...' : 'Save All Settings'}
                     </button>

@@ -106,7 +106,7 @@ const AdminProducts = ({ isDarkMode }) => {
                 {!showForm && (
                     <button 
                         onClick={() => setShowForm(true)}
-                        className="bg-[#5f41e4] hover:bg-indigo-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors shadow-sm"
+                        className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
                     >
                         <Plus size={20} />
                         Add New Product
@@ -119,7 +119,7 @@ const AdminProducts = ({ isDarkMode }) => {
                 <div className={`p-6 rounded-2xl shadow-sm border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
                     <div className="flex justify-between items-center mb-6 border-b pb-4 dark:border-slate-700">
                         <h2 className="text-xl font-bold flex items-center gap-2">
-                            {editingProduct ? <Edit2 size={20} className="text-[#5f41e4]" /> : <Plus size={20} className="text-[#5f41e4]" />}
+                            {editingProduct ? <Edit2 size={20} className="text-emerald-500" /> : <Plus size={20} className="text-emerald-500" />}
                             {editingProduct ? 'Edit Product' : 'Add New Product'}
                         </h2>
                         <button onClick={resetForm} className="text-slate-400 hover:text-red-500 transition-colors">
@@ -131,34 +131,34 @@ const AdminProducts = ({ isDarkMode }) => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Title</label>
-                                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} required />
+                                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} required />
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Icon Name (lucide-react)</label>
-                                <input type="text" value={icon} onChange={(e) => setIcon(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} placeholder="e.g., Activity, Cpu" />
+                                <input type="text" value={icon} onChange={(e) => setIcon(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} placeholder="e.g., Activity, Cpu" />
                             </div>
                         </div>
 
                         <div>
                             <label className="block mb-1 text-sm font-medium">Short Description (for cards)</label>
-                            <textarea value={desc} onChange={(e) => setDesc(e.target.value)} rows="2" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} required />
+                            <textarea value={desc} onChange={(e) => setDesc(e.target.value)} rows="2" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} required />
                         </div>
                         
                         <div>
                             <label className="block mb-1 text-sm font-medium">Detailed Description (for product page)</label>
-                            <textarea value={details} onChange={(e) => setDetails(e.target.value)} rows="4" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5f41e4]`} />
+                            <textarea value={details} onChange={(e) => setDetails(e.target.value)} rows="4" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} />
                         </div>
                         
                         <div>
                             <label className="block mb-1 text-sm font-medium">Product Image</label>
                             <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} className={`w-full p-2 text-sm rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'}`} />
                             {editingProduct && editingProduct.imageUrl && (
-                                <p className="text-xs mt-2 text-[#5f41e4]">Current image exists. Upload new to replace.</p>
+                                <p className="text-xs mt-2 text-emerald-500">Current image exists. Upload new to replace.</p>
                             )}
                         </div>
                         
                         <div className="flex gap-3 pt-4">
-                            <button type="submit" className="bg-[#5f41e4] hover:bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-medium transition-colors">
+                            <button type="submit" className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-medium transition-colors cursor-pointer">
                                 {editingProduct ? 'Save Changes' : 'Create Product'}
                             </button>
                             <button type="button" onClick={resetForm} className={`px-6 py-2.5 rounded-xl font-medium transition-colors ${isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-slate-200 hover:bg-slate-300 text-slate-800'}`}>
@@ -207,7 +207,7 @@ const AdminProducts = ({ isDarkMode }) => {
                                         <td className="p-4 font-medium">{product.title}</td>
                                         <td className="p-4 text-sm text-slate-500 hidden md:table-cell max-w-xs truncate">{product.desc}</td>
                                         <td className="p-4 text-sm">
-                                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-[#5f41e4]/10 text-[#5f41e4]">
+                                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                                                 {product.category || 'General'}
                                             </span>
                                         </td>
