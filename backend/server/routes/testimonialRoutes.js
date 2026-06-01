@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import jwt from 'jsonwebtoken';
+import { adminAuth } from '../middleware/auth.js';
 import Testimonial from '../models/Testimonial.js';
 
 const router = express.Router();
@@ -16,17 +16,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-const auth = (req, res, next) => {
-    const token = req.header('x-auth-token');
-    if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (e) {
-        res.status(400).json({ msg: 'Token is not valid' });
-    }
-};
+// Auth Middleware imported centrally as adminAuth
 
 router.get('/', async (req, res) => {
     try {
@@ -37,7 +27,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', auth, upload.single('image'), async (req, res) => {
+router.post('/', adminAuth, upload.single('image'), async (req, res) => {
     try {
         const { name, role, content, rating } = req.body;
         const newTestimonial = new Testimonial({
@@ -51,7 +41,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
     }
 });
 
-router.put('/:id', auth, upload.single('image'), async (req, res) => {
+router.put('/:id', adminAuth, upload.single('image'), async (req, res) => {
     try {
         const { name, role, content, rating } = req.body;
         const updateData = { name, role, content, rating };
@@ -63,7 +53,7 @@ router.put('/:id', auth, upload.single('image'), async (req, res) => {
     }
 });
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', adminAuth, async (req, res) => {
     try {
         await Testimonial.findByIdAndDelete(req.params.id);
         res.json({ message: 'Deleted successfully' });

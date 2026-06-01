@@ -1,5 +1,5 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import { adminAuth } from '../middleware/auth.js';
 import SiteSettings from '../models/SiteSettings.js';
 
 import multer from 'multer';
@@ -17,17 +17,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-const auth = (req, res, next) => {
-    const token = req.header('x-auth-token');
-    if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (e) {
-        res.status(400).json({ msg: 'Token is not valid' });
-    }
-};
+// Auth Middleware imported centrally as adminAuth
 
 router.get('/', async (req, res) => {
     try {
@@ -42,7 +32,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/', auth, upload.single('image'), async (req, res) => {
+router.post('/', adminAuth, upload.single('image'), async (req, res) => {
     try {
         const updates = { ...req.body };
         

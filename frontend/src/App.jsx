@@ -14,6 +14,7 @@ import AdminRoutes from './routes/AdminRoutes';
 // Lazy Load Pages
 const Home = lazy(() => import('./pages/Home'));
 const ProductDetails = lazy(() => import('./pages/ProductDetails'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 // Loading Fallback
 const LoadingFallback = () => (
@@ -35,6 +36,27 @@ function App() {
     }
   }, [isDarkMode]);
 
+  // Track visitor session (once per browser tab session)
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('visited');
+    if (!hasVisited) {
+      fetch('http://localhost:5000/api/visits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pagePath: window.location.pathname + window.location.hash,
+          referrer: document.referrer || ''
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          sessionStorage.setItem('visited', 'true');
+        }
+      })
+      .catch(err => console.error('Error reporting visit:', err));
+    }
+  }, []);
+
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
   return (
@@ -53,6 +75,11 @@ function App() {
               <Route path="/product/:id" element={
                 <PublicLayout isDarkMode={isDarkMode} toggleTheme={toggleTheme} onOpenPartnerPortal={() => setIsPortalOpen(true)}>
                   <ProductDetails isDarkMode={isDarkMode} />
+                </PublicLayout>
+              } />
+              <Route path="/dashboard" element={
+                <PublicLayout isDarkMode={isDarkMode} toggleTheme={toggleTheme} onOpenPartnerPortal={() => setIsPortalOpen(true)}>
+                  <Dashboard isDarkMode={isDarkMode} />
                 </PublicLayout>
               } />
 

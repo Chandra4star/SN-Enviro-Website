@@ -64,7 +64,7 @@ const AdminAbout = ({ isDarkMode }) => {
                         value={aboutText} 
                         onChange={(e) => setAboutText(e.target.value)} 
                         rows={6}
-                        className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5a8bf7]`} 
+                        className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} 
                         placeholder="Founded in January 2017 by a team of seasoned technocrats..."
                     />
                 </div>
@@ -93,7 +93,7 @@ const AdminAbout = ({ isDarkMode }) => {
                     <button 
                         type="submit" 
                         disabled={loading}
-                        className="bg-[#5a8bf7] hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
+                        className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
                     >
                         <Save size={18} /> {loading ? 'Saving...' : 'Save About Settings'}
                     </button>

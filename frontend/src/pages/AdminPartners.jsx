@@ -94,7 +94,7 @@ const AdminPartners = ({ isDarkMode }) => {
                     <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Add or remove partner logos</p>
                 </div>
                 {!showForm && (
-                    <button onClick={() => setShowForm(true)} className="bg-[#5a8bf7] hover:bg-blue-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors">
+                    <button onClick={() => setShowForm(true)} className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors cursor-pointer">
                         <Plus size={20} /> Add Partner
                     </button>
                 )}
@@ -112,11 +112,11 @@ const AdminPartners = ({ isDarkMode }) => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Company Name</label>
-                                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5a8bf7]`} required />
+                                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} required />
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Website Link (Optional)</label>
-                                <input type="url" value={websiteLink} onChange={(e) => setWebsiteLink(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-[#5a8bf7]`} placeholder="https://..." />
+                                <input type="url" value={websiteLink} onChange={(e) => setWebsiteLink(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} placeholder="https://..." />
                             </div>
                         </div>
                         <div>
@@ -124,8 +124,8 @@ const AdminPartners = ({ isDarkMode }) => {
                             <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} className={`w-full p-2 text-sm rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'}`} />
                         </div>
                         <div className="flex gap-3 pt-4">
-                            <button type="submit" className="bg-[#5a8bf7] hover:bg-blue-600 text-white px-6 py-2.5 rounded-xl font-medium">Save Partner</button>
-                            <button type="button" onClick={resetForm} className={`px-6 py-2.5 rounded-xl font-medium ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`}>Cancel</button>
+                            <button type="submit" className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-medium cursor-pointer">Save Partner</button>
+                            <button type="button" onClick={resetForm} className={`px-6 py-2.5 rounded-xl font-medium transition-colors ${isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-slate-200 hover:bg-slate-300 text-slate-800'}`}>Cancel</button>
                         </div>
                     </form>
                 </div>
