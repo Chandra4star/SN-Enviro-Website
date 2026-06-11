@@ -16,9 +16,10 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
     }, []);
 
     const navLinks = [
+        { name: 'Live Dashboard', href: '/dashboard' },
         {
             name: 'Products',
-            href: '#products',
+            href: '/#products',
             dropdown: [
                 { name: 'Continuous Ambient Air Quality Monitoring Stations', href: '/product/698da53e5bff466e7fbecc3b' },
                 { name: 'Continuous Emission Monitoring Systems', href: '/product/698da53e5bff466e7fbecc39' },

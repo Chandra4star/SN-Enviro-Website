@@ -101,7 +101,7 @@ const AdminTestimonials = ({ isDarkMode }) => {
                     <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Add client reviews</p>
                 </div>
                 {!showForm && (
-                    <button onClick={() => setShowForm(true)} className="bg-[#73c896] hover:bg-emerald-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors">
+                    <button onClick={() => setShowForm(true)} className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors cursor-pointer">
                         <Plus size={20} /> Add Review
                     </button>
                 )}
@@ -111,27 +111,27 @@ const AdminTestimonials = ({ isDarkMode }) => {
                 <div className={`p-6 rounded-2xl shadow-sm border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
                     <div className="flex justify-between items-center mb-6 border-b pb-4 dark:border-slate-700">
                         <h2 className="text-xl font-bold">{editingItem ? 'Edit Review' : 'Add New Review'}</h2>
-                        <button onClick={resetForm} className="text-slate-400 hover:text-red-500"><X size={24} /></button>
+                        <button onClick={resetForm} className="text-slate-400 hover:text-red-500 transition-colors"><X size={24} /></button>
                     </div>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Client Name</label>
-                                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none`} required />
+                                <input type="text" value={name} onChange={(e) => setName(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} required />
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Role / Company</label>
-                                <input type="text" value={role} onChange={(e) => setRole(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none`} required />
+                                <input type="text" value={role} onChange={(e) => setRole(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} required />
                             </div>
                         </div>
                         <div>
                             <label className="block mb-1 text-sm font-medium">Review Content</label>
-                            <textarea value={content} onChange={(e) => setContent(e.target.value)} rows="3" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none`} required />
+                            <textarea value={content} onChange={(e) => setContent(e.target.value)} rows="3" className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} required />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Rating (1-5)</label>
-                                <input type="number" min="1" max="5" value={rating} onChange={(e) => setRating(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none`} required />
+                                <input type="number" min="1" max="5" value={rating} onChange={(e) => setRating(e.target.value)} className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-50 border-slate-200'} outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20`} required />
                             </div>
                             <div>
                                 <label className="block mb-1 text-sm font-medium">Client Photo (Avatar)</label>
@@ -139,8 +139,8 @@ const AdminTestimonials = ({ isDarkMode }) => {
                             </div>
                         </div>
                         <div className="flex gap-3 pt-4">
-                            <button type="submit" className="bg-[#73c896] hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-medium">Save Review</button>
-                            <button type="button" onClick={resetForm} className={`px-6 py-2.5 rounded-xl font-medium ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`}>Cancel</button>
+                            <button type="submit" className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-medium cursor-pointer">Save Review</button>
+                            <button type="button" onClick={resetForm} className={`px-6 py-2.5 rounded-xl font-medium transition-colors ${isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-slate-200 hover:bg-slate-300 text-slate-800'}`}>Cancel</button>
                         </div>
                     </form>
                 </div>
