@@ -1,13 +1,207 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle, XCircle, Activity, Info, FileText, Settings, Layers, Zap, Wrench, HelpCircle } from 'lucide-react';
 
+const productSubTabsConfig = {
+    // CAAQMS
+    "698da53e5bff466e7fbecc3b": {
+        intro: "Continuous Ambient Air Quality Monitoring Systems (CAAQMS) are vital tools for urban air quality management. Unlike stack monitoring, which measures high concentrations at the source, CAAQMS measures trace levels of pollutants in the ambient air we breathe. This requires high-sensitivity analyzers often operating in the low parts-per-billion (ppb) range.",
+        systemTitle: "CAAQMS Station & Shelter Integration (System)",
+        systemDesc: "The station represents the physical enclosure and environmental support systems required to keep high-precision analyzers running 24/7 in extreme weather conditions. SN Enviro integrates robust mechanical and electrical systems to guarantee continuous data availability.",
+        systemTabLabel: "System & Station Integration",
+        productTabLabel: "Reference Analyzers & Products",
+        systemCards: [
+            { title: "Climate-Controlled Shelter", icon: "Layers", desc: "Double-walled, thermally insulated walk-in container equipped with dual redundant HVAC units to maintain a stable interior environment (25°C ± 1°C). Protects analytical instruments from dust, humidity, and temperature spikes." },
+            { title: "Sampling Intake Manifold", icon: "Settings", desc: "A glass or Teflon manifold with a high-capacity moisture trap and high-volume blower drawing ambient air from a height of 3-10 meters. Rapid transport ensures no trace gas reactions or losses in transit." },
+            { title: "IIoT Telemetry Gateway & RCU", icon: "Zap", desc: "Integrated remote calibration control unit and cellular data logger. It averages data, generates QA status flags, and securely streams real-time values directly to environmental board servers (CPCB/SPCB)." },
+            { title: "Dynamic Gas Dilution System", icon: "Wrench", desc: "Features built-in Zero Air Generators and high-accuracy mass flow controllers to perform automatic span and zero calibrations. Meets strict regulatory compliance guidelines." }
+        ],
+        designatedSources: [
+            { point: "Ambient Perimeter", name: "Fenceline Monitoring", desc: "Perimeter boundaries of heavy industrial plants to track fugitive emissions leaving the facility." },
+            { point: "Urban Traffic", name: "Roadside Stations", desc: "Major metropolitan intersections and high-density traffic corridors to measure vehicular exhaust impact." },
+            { point: "Residential / Rural", name: "Background Stations", desc: "Baseline stations located in populated or protected ecological zones to assess general public exposure." }
+        ],
+        productTitle: "CAAQMS Reference Analyzers & Instrumentation (Products)",
+        productDesc: "The actual instrumentation housed inside the shelter. Each analyzer utilizes specific, US EPA-approved reference methods to measure trace levels of pollutants in the ambient air.",
+        productCards: [
+            { id: "so2", type: "Gas Analyzer", name: "SO₂ Analyzer", specs: ["Method: Pulsed UV Fluorescence", "LDL: < 0.5 ppb", "EPA Status: Reference Standard"], desc: "Measures trace sulfur dioxide using UV light excitation at 214nm, filtering out atmospheric interferents." },
+            { id: "nox", type: "Gas Analyzer", name: "NO-NO₂-NOₓ Analyzer", specs: ["Method: Chemiluminescence", "LDL: < 0.4 ppb", "EPA Status: Reference Standard"], desc: "Measures nitric oxide and nitrogen oxides through the light-emitting reaction of NO with ozone." },
+            { id: "co", type: "Gas Analyzer", name: "CO Analyzer", specs: ["Method: Gas Filter Correlation NDIR", "LDL: < 0.04 ppm", "EPA Status: Reference Standard"], desc: "Utilizes gas filter correlation spectroscopy to eliminate carbon dioxide and water vapor interference." },
+            { id: "o3", type: "Gas Analyzer", name: "O₃ Analyzer", specs: ["Method: UV Photometry", "LDL: < 0.5 ppb", "EPA Status: Reference Standard"], desc: "Measures absorption of UV light at 254nm within a dual-path cell to compute ground-level ozone." },
+            { id: "pm", type: "Dust Monitor", name: "PM10 / PM2.5 (BAM)", specs: ["Method: Beta Ray Attenuation", "Range: 0 - 1000 µg/m³", "EPA Status: Equivalent Standard"], desc: "Provides continuous mass measurement of particulate fractions using Carbon-14 beta ray absorption." }
+        ]
+    },
+    // CEMS
+    "698da53e5bff466e7fbecc39": {
+        intro: "The SCS-900UV is a turnkey CEMS solution designed for the most demanding compliance monitoring applications. It integrates the precision of UV-DOAS analysis with a robust sampling system engineered to handle high-temperature, high-dust, and corrosive gas streams.",
+        systemTitle: "CEMS System & Cabinet Integration (System)",
+        systemDesc: "The CEMS system comprises probe assemblies, high-temperature sample transfer lines, and processing cabinets designed to condition corrosive flue gas before direct analyzer measurement.",
+        systemTabLabel: "System & Cabinet Integration",
+        productTabLabel: "Reference Analyzers & Products",
+        systemCards: [
+            { title: "Heated Sampling Probe & Line", icon: "Layers", desc: "A high-durability, corrosion-resistant probe mounted directly on the stack DN100 flange, linked to a heated sample line maintained at 180°C. This avoids moisture condensation and loss of soluble gases." },
+            { title: "Sample Conditioning Cabinet", icon: "Settings", desc: "Uses a high-performance thermoelectric sample cooler to instantly condense water vapor. Includes dust filters, acid-mist traps, and gas pumps to condition flue gases to a clean, dry state." },
+            { title: "Integrated PLC & Solenoid Control", icon: "Zap", desc: "Houses the central Programmable Logic Controller (PLC) which handles probe blowback cycles for self-cleaning and triggers automatic daily calibration schedules." },
+            { title: "Auto-Calibration Unit", icon: "Wrench", desc: "Features standard calibration gas cylinder manifolds and solenoid control valves to perform zero/span check validation directly at the probe head, ensuring CPCB compliance." }
+        ],
+        designatedSources: [
+            { point: "Boiler Stack / Chimney", name: "Flue Gas Outlets", desc: "Primary release stacks of coal, gas, or biomass combustion boilers exceeding 150°C temperatures." },
+            { point: "Preheater Exit", name: "Cement Kiln Outlets", desc: "High-dust and high-temperature gas outlets located post-bag filter or electrostatic precipitator." },
+            { point: "Scrubber Stack", name: "Desulfurization Units", desc: "Wet or dry flue gas desulfurization (FGD) outlet ducts to monitor sulfur dioxide scrubbing efficiency." }
+        ],
+        productTitle: "CEMS Reference Analyzers & Instrumentation (Products)",
+        productDesc: "The actual measurement instruments housed in the control cabinet or stack. These high-precision products continuously measure emissions levels.",
+        productCards: [
+            { id: "so2", type: "Gas Analyzer", name: "SO₂-NO-NO₂ (UV-DOAS)", specs: ["Method: Differential UV Spectroscopy", "Accuracy: < ±1.0% F.S.", "Gases: SO₂, NO, NO₂"], desc: "Utilizes UV-DOAS technology to measure SO2 and NOx without water vapor or CO2 cross-interference." },
+            { id: "co", type: "Gas Analyzer", name: "CO / CO₂ Analyzer", specs: ["Method: NDIR (Non-Dispersive Infrared)", "Range: 0 - 500 / 5000 ppm", "Gases: CO, CO₂"], desc: "Employs NDIR optical absorption cell for continuous tracking of combustion and carbon emissions." },
+            { id: "o2", type: "Gas Analyzer", name: "Oxygen Analyzer", specs: ["Method: Electrochemical / Zirconia", "Range: 0 - 25% O₂", "Features: Long life, high speed"], desc: "Measures residual oxygen in flue gas to normalize other pollutant concentrations to reference oxygen level." },
+            { id: "pm", type: "Dust Monitor", name: "PM Opacity Monitor", specs: ["Method: Laser Backscattering", "Range: 0 - 1000 mg/m³", "Compliance: US EPA Compliant"], desc: "Cross-stack optical transceiver measuring flue gas turbidity, opacity, and particulate concentrations." },
+            { id: "flow", type: "Flow Monitor", name: "Flue Gas Flow Monitor", specs: ["Method: Pitot Tube / Ultrasonic", "Parameters: Velocity, Temp, Pressure", "Purging: Automatic back-purge"], desc: "Measures stack gas velocity, pressure, and temperature to calculate total volumetric emission rate." }
+        ]
+    },
+    // EQMS
+    "698da53e5bff466e7fbecc40": {
+        intro: "Effluent Quality Monitoring Systems (EQMS) are designed to monitor the quality of treated water discharged from industrial manufacturing units, STP, and ETP plants. Real-time monitoring of effluent ensures that industries meet the statutory requirements set by environmental control boards.",
+        systemTitle: "EQMS System Configuration (System)",
+        systemDesc: "The system represents open-channel or inline integrations designed to house and clean digital sensors in contact with harsh effluents.",
+        systemTabLabel: "System Configuration",
+        productTabLabel: "Wastewater Sensors & Products",
+        systemCards: [
+            { title: "Open Channel Mounting Stand", icon: "Layers", desc: "Rigid, corrosion-resistant mounting structure for submersing sensors in industrial drainage channels or open pits." },
+            { title: "Closed-Pipe Flow Cell", icon: "Settings", desc: "Pressurized bypass sampling chamber for inline pipe sensor mounting, preventing bubbles and turbulence from affecting readings." },
+            { title: "Multi-Parameter Controller", icon: "Zap", desc: "Central hub displaying sensor metrics, storing calibration history, and transmitting values via RS485 Modbus." },
+            { title: "Self-Cleaning Compressor", icon: "Wrench", desc: "Automatic pressurized air-purge system that cleans digital sensors at programmable intervals to reduce manual maintenance." }
+        ],
+        designatedSources: [
+            { point: "Final Outfall", name: "Treated Water Discharge", desc: "The primary channel or pipeline through which treated industrial effluent or sewage leaves the facility." },
+            { point: "ETP/STP Inlet", name: "Raw Wastewater Stream", desc: "Untreated effluent lines entering treatment plants to monitor chemical loading rates." },
+            { point: "Aeration Tank", name: "Biological Process Points", desc: "Activated sludge basins where continuous monitoring of pH and suspended solids stabilizes treatment." }
+        ],
+        productTitle: "EQMS Digital Sensors & Instrumentation (Products)",
+        productDesc: "Reagent-free optical and electrochemical digital sensors that continuously measure wastewater quality parameters.",
+        productCards: [
+            { id: "ph", type: "Water Sensor", name: "pH/ORP Sensor", specs: ["Method: Glass Electrode", "Range: 0-14 pH", "Accuracy: ±0.1 pH"], desc: "Digital electrochemical sensor with self-cleaning flat glass surface and internal reference standard." },
+            { id: "cod", type: "Water Sensor", name: "COD/BOD Analyzer", specs: ["Method: UV-Vis Absorption @ 254nm", "COD Range: 0-1000 mg/L", "BOD Range: 0-500 mg/L"], desc: "UV-Vis reagent-free spectrophotometer measuring organic loading at 254nm without chemicals." },
+            { id: "tss", type: "Water Sensor", name: "TSS Sensor", specs: ["Method: IR Nephelometry", "Range: 0-4000 mg/L", "Enclosure: IP68 Submersible"], desc: "Infrared light-scattering sensor measuring total suspended solids with built-in scratching wiper." },
+            { id: "flow", type: "Flow Meter", name: "Electromagnetic Flow Meter", specs: ["Method: Faraday Induction", "Velocity: Up to 10 m/s", "Output: 4-20mA, Modbus"], desc: "Obstruction-less flow sensor measuring discharge velocity and volume with CPCB-compliant totalizer." }
+        ]
+    },
+    // IIoT Logger
+    "698da53e5bff466e7fbecc38": {
+        intro: "Our IIoT-based Data Loggers and Remote Calibration Units serve as cloud-connected secure gateways that collect analog/digital signals from analyzers, buffer data locally to prevent loss during network outages, and stream it securely to pollution control boards.",
+        systemTitle: "IIoT Telemetry & Cabinet Integration (System)",
+        systemDesc: "The system represents control cabinet mounts, power supply modules, and cellular antennas designed to guarantee data security and availability.",
+        systemTabLabel: "Cabinet & Telemetry",
+        productTabLabel: "Gateways & Telemetry Products",
+        systemCards: [
+            { title: "DIN-Rail Control Cabinet", icon: "Layers", desc: "Heavy-duty industrial cabinet housing the logger gateway, fuses, circuit breakers, and power stabilizers." },
+            { title: "Industrial UPS & Power Supply", icon: "Settings", desc: "24V DC power module with integrated battery backup to protect data during short-term outages." },
+            { title: "Multi-Band LTE Antenna", icon: "Zap", desc: "External, high-gain MIMO cellular antenna to guarantee reliable data transmission in industrial yards." },
+            { title: "SD Card Storage Buffer", icon: "Wrench", desc: "Secure, non-volatile local storage that buffers logs during cellular disconnects and uploads historical data once online." }
+        ],
+        designatedSources: [
+            { point: "Telemetry Node", name: "Analyzer Cabinets", desc: "Integrated telemetry interface inside CEMS, CAAQMS, or EQMS control cabinets." },
+            { point: "Calibration Line", name: "Remote Gas Manifolds", desc: "Solenoid-switched validation systems linked directly to high-pressure calibration gas cylinders." },
+            { point: "PCB Gateway", name: "Secure Server Uplinks", desc: "Direct encrypted communication channels pushing real-time data packets to regulatory databases." }
+        ],
+        productTitle: "IIoT Logger Gateways & Modules (Products)",
+        productDesc: "High-integrity telemetry gateways and control modules designed to interface with field analytical instruments.",
+        productCards: [
+            { id: "gateway", type: "IIoT Gateway", name: "Modbus/Analog Gateway", specs: ["Inputs: 8x Analog, 8x Digital, 2x RS485", "Protocols: Modbus RTU/TCP, MQTT", "Mount: DIN Rail"], desc: "Central IIoT logger polling analog (4-20mA) and Modbus RTU channels simultaneously." },
+            { id: "cal_module", type: "Control Module", name: "Remote Calibration Module", specs: ["Relays: 4x SPDT Control", "Trigger: Secure Bi-Directional", "Diagnostics: Watchdog Timer"], desc: "RCU gateway triggered via cloud to execute zero/span check validation sequences." },
+            { id: "mqtt_link", type: "Security Gateway", name: "MQTT Encryption Server Link", specs: ["Security: SSL/TLS v1.3", "Data Format: Encrypted JSON", "Buffering: Automatic Backfill"], desc: "Direct SSL/TLS client pushing encrypted JSON files directly to regulatory servers." }
+        ]
+    },
+    // WMS
+    "698da53e5bff466e7fbecc41": {
+        intro: "Weather Monitoring Systems (WMS) are compact, robust, and highly accurate Automatic Weather Stations (AWS) designed for environmental applications. These systems provide critical wind and stability data for air quality dispersion modeling.",
+        systemTitle: "AWS Mast & Power Integration (System)",
+        systemDesc: "The meteorological mast assembly, power modules, and lightning safety equipment required for continuous outdoor operation.",
+        systemTabLabel: "Mast & Power Integration",
+        productTabLabel: "Meteorological Sensors & Products",
+        systemCards: [
+            { title: "Guy-Wired Mast", icon: "Layers", desc: "Heavy-duty 10m meteorological mast, complete with structural guy-wires, cross-arms, and leveling base." },
+            { title: "Lightning Protection", icon: "Settings", desc: "Copper lightning spike and grounding pit to shield meteorological sensors from electrical strikes." },
+            { title: "Weatherproof Logger Enclosure", icon: "Zap", desc: "IP66 rated enclosure housing the battery, solar regulator, and telemetry logger." },
+            { title: "Solar Power System", icon: "Wrench", desc: "High-efficiency solar panels and deep-cycle batteries enabling standalone operation in remote fields." }
+        ],
+        designatedSources: [
+            { point: "Ground Station", name: "Open Meteorological Mast", desc: "A minimum 10-meter unobstructed mast located in an open field to measure clean wind vectors." },
+            { point: "Rooftop Mount", name: "Building Met Stations", desc: "Elevated roof installations for microclimate tracking, typically compensating for building aerodynamic drag." },
+            { point: "Solar/Wind Site", name: "Renewable Energy Fields", desc: "Installed directly adjacent to solar trackers or wind turbines to measure incoming irradiance and wind limits." }
+        ],
+        productTitle: "WMS Weather Sensors & Instruments (Products)",
+        productDesc: "High-precision meteorological sensors designed for direct integration with environmental dataloggers.",
+        productCards: [
+            { id: "wind", type: "Met Sensor", name: "Ultrasonic Wind Sensor", specs: ["Parameter: Speed & Direction", "Speed Range: 0-60 m/s", "Accuracy: ±2%"], desc: "Solid-state sensor measuring wind speed and direction with no moving parts, avoiding mechanical wear." },
+            { id: "temp_hum", type: "Met Sensor", name: "Temp/Humidity Sensor", specs: ["Temp Range: -40°C to +60°C", "Humidity: 0-100% RH", "Shield: Multi-plate radiation shield"], desc: "Capacitive humidity and high-accuracy RTD temperature sensor housed inside a solar radiation shield." },
+            { id: "rain", type: "Met Sensor", name: "Rain Gauge", specs: ["Method: Tipping Bucket / Optical", "Orifice: 200mm diameter", "Resolution: 0.2 mm"], desc: "Tipping bucket or optical drop counter for high-precision rainfall rate tracking." },
+            { id: "pyrano", type: "Met Sensor", name: "Pyranometer", specs: ["Parameter: Solar Radiation", "Spectral Range: 300 to 2800 nm", "Output: Millivolts / RS485"], desc: "Thermopile sensor measuring incoming shortwave solar radiation, critical for atmospheric dispersion." },
+            { id: "baro", type: "Met Sensor", name: "Barometric Pressure Sensor", specs: ["Range: 500 to 1100 hPa", "Accuracy: ±0.15 hPa", "Technology: Piezoresistive"], desc: "Piezoresistive pressure sensor for ambient atmospheric tracking." }
+        ]
+    },
+    // Smart City
+    "698da53e5bff466e7fbecc42": {
+        intro: "Smart City Environmental Monitoring Solutions bridge the gap between heavy reference stations and local areas by deploying networks of compact, cost-effective sensor nodes on street poles to map urban pollution hotspots.",
+        systemTitle: "Smart City IoT Integration (System)",
+        systemDesc: "Lightweight pole mounting brackets, solar charging systems, and cloud databases that run city-wide sensor grids.",
+        systemTabLabel: "IoT Integration & Mounting",
+        productTabLabel: "Environmental Nodes & Products",
+        systemCards: [
+            { title: "Utility Pole Mounting Clamps", icon: "Layers", desc: "Universal brackets to easily mount the compact monitoring node onto streetlights or utility poles." },
+            { title: "Micro-Solar Power", icon: "Settings", desc: "High-durability micro solar panel and Lithium-Ion battery pack enabling self-powered IoT operations." },
+            { title: "IP65 ABS Enclosure", icon: "Zap", desc: "Lightweight, impact-resistant ABS enclosure designed to withstand outdoor weathering." },
+            { title: "Cloud Dashboard", icon: "Wrench", desc: "Web portal mapping spatial pollution gradients and showing real-time public Air Quality Index (AQI) values." }
+        ],
+        designatedSources: [
+            { point: "Utility Pole", name: "Streetlight Node", desc: "Pole-mounted hyper-local monitoring nodes spaced 50-200 meters apart across urban centers." },
+            { point: "Traffic Junction", name: "Intersection Node", desc: "Dense sensor nodes mapping real-time pollution spikes near pedestrian crossings and traffic signals." },
+            { point: "Public Zone", name: "Parks & School Zones", desc: "Low-profile nodes tracking air quality in school yards, hospitals, and parks to safeguard children and vulnerable groups." }
+        ],
+        productTitle: "Smart City IoT Sensor Nodes (Products)",
+        productDesc: "Compact, wireless sensor modules designed to monitor micro-climates and localized street pollution.",
+        productCards: [
+            { id: "gas_node", type: "IoT Node", name: "Compact Gas Node", specs: ["Parameters: NO2, SO2, CO, O3", "Sensing: Electrochemical Cells", "Life: 18-24 months"], desc: "Houses electrochemical sensors measuring ambient CO, NO2, SO2, and Ozone with temperature compensation." },
+            { id: "pm_node", type: "IoT Node", name: "Compact PM Node", specs: ["Parameters: PM2.5, PM10", "Sensing: Laser Scattering", "Range: 0-1000 µg/m³"], desc: "Miniature laser-scattering particle counter estimating PM10 and PM2.5 mass concentrations." },
+            { id: "noise", type: "IoT Node", name: "Noise Level Sensor", specs: ["Parameter: dB(A) Decibels", "Range: 30 - 130 dB", "Microphone: Class 2 Weatherproof"], desc: "Integrated weatherproof decibel meter measuring ambient urban environmental noise level." }
+        ]
+    },
+    // Advanced Instrumentation
+    "698da53e5bff466e7fbecc43": {
+        intro: "Advanced Instrumentation forms the core of industrial automation and process control. Our portfolio covers a wide range of high-precision sensors, flow meters, and analytical instruments for industrial automation.",
+        systemTitle: "Process Control Rack Integration (System)",
+        systemDesc: "standard rack housings, Zener safety barriers, and loop isolation devices ensuring safe signal acquisition inside hazardous industrial zones.",
+        systemTabLabel: "Rack & Signal Integration",
+        productTabLabel: "Process Instruments & Products",
+        systemCards: [
+            { title: "DIN-Rail Enclosures", icon: "Layers", desc: "standard rail mounts for transmitters, isolates, and barriers inside instrumentation racks." },
+            { title: "HART Protocol Loop", icon: "Settings", desc: "standard 4-20mA HART bi-directional interface enabling sensor diagnostics over standard loop cabling." },
+            { title: "Intrinsically Safe Barriers", icon: "Zap", desc: "Zener barriers limiting electrical energy to prevent spark ignition in explosive gas zones." }
+        ],
+        designatedSources: [
+            { point: "Process Pipe", name: "Inline Flow Loops", desc: "Pressurized pipelines containing process chemicals, acids, raw water, or oil streams." },
+            { point: "Storage Vessel", name: "Chemical / Fuel Tanks", desc: "Atmospheric or pressurized storage vessels requiring continuous level and pressure surveillance." },
+            { point: "Reactor Vessel", name: "Process Mixing Tanks", desc: "Agitated reactor tanks where analytical electrodes monitor chemical activity during active production." }
+        ],
+        productTitle: "Industrial Process Instruments (Products)",
+        productDesc: "High-precision flow, level, pressure, and analytical transmitters for industrial automation.",
+        productCards: [
+            { id: "flow_meter", type: "Process Instrument", name: "Electromagnetic Flow Meter", specs: ["Fittings: Flanged DN15-DN2000", "Lining: PTFE / Hard Rubber", "Accuracy: ±0.5% of rate"], desc: "Flanged flow sensor for pipelines measuring water and chemical flow rates." },
+            { id: "radar_level", type: "Process Instrument", name: "Radar Level Transmitter", specs: ["Method: 80GHz FMCW", "Range: Up to 30m / 120m", "Accuracy: ±1 mm"], desc: "Guided-wave or non-contact FMCW radar transmitter for high-accuracy storage tank level tracking." },
+            { id: "pressure", type: "Process Instrument", name: "Pressure Transmitter", specs: ["Fittings: SS316L Diaphragm", "Range: -1 to 400 Bar", "Output: 4-20mA HART"], desc: "Stainless steel pressure sensor measuring differential, gauge, or absolute process pressures." },
+            { id: "electrodes", type: "Process Instrument", name: "Analytical Electrodes", specs: ["Parameters: DO, Cond, Chlorine", "Temperature: Built-in Pt100", "Output: Modbus RS485"], desc: "High-precision analytical sensors for dissolved oxygen, conductivity, and free chlorine monitoring." }
+        ]
+    }
+};
+
 const ProductDetails = ({ isDarkMode }) => {
     const { id } = useParams();
+    const location = useLocation();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [activeSubTab, setActiveSubTab] = useState('system');
 
     const defaultProductList = [
         {
@@ -329,6 +523,31 @@ const ProductDetails = ({ isDarkMode }) => {
         setLoading(false);
     }, [id]);
 
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const tabParam = queryParams.get('tab');
+        if (tabParam === 'product' || tabParam === 'system') {
+            setActiveSubTab(tabParam);
+        }
+    }, [location.search]);
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const itemParam = queryParams.get('item');
+        if (itemParam && activeSubTab === 'product') {
+            setTimeout(() => {
+                const element = document.getElementById(itemParam);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    element.classList.add('ring-4', 'ring-emerald-500', 'scale-[1.02]');
+                    setTimeout(() => {
+                        element.classList.remove('ring-4', 'ring-emerald-500', 'scale-[1.02]');
+                    }, 2500);
+                }
+            }, 300);
+        }
+    }, [location.search, activeSubTab]);
+
     if (loading) return (
         <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}>
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
@@ -416,36 +635,176 @@ const ProductDetails = ({ isDarkMode }) => {
                     </h2>
 
                     <div className="max-w-5xl mx-auto space-y-16">
-                        {/* 1. Long Description */}
-                        {product.longDescription && (
-                            <motion.section
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                            >
-                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Overview</h3>
-                                <div className={`prose max-w-none ${isDarkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
-                                    {product.longDescription.split('\n\n').map((paragraph, idx) => (
-                                        <p key={idx} className="mb-4 leading-relaxed text-lg font-light">{paragraph}</p>
-                                    ))}
-                                </div>
-                            </motion.section>
-                        )}
+                        {/* 1. Long Description & Custom Configured Sections */}
+                        {productSubTabsConfig[product._id] ? (
+                            (() => {
+                                const config = productSubTabsConfig[product._id];
+                                return (
+                                    <>
+                                        {/* Intro */}
+                                        <motion.section
+                                            initial={{ opacity: 0, y: 20 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            className="pb-8 border-b border-slate-200 dark:border-slate-800"
+                                        >
+                                            <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Overview</h3>
+                                            <div className={`prose max-w-none ${isDarkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
+                                                <p className="mb-4 leading-relaxed text-lg font-light text-justify">
+                                                    {config.intro}
+                                                </p>
+                                            </div>
+                                        </motion.section>
 
-                        {/* 2. Operating Principle */}
-                        {product.operatingPrinciple && (
-                            <motion.section
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                            >
-                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Operating Principle</h3>
-                                <p className={`text-lg leading-relaxed font-light ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                                    {product.operatingPrinciple}
-                                </p>
-                            </motion.section>
+                                        {/* System and Product Tabs */}
+                                        <motion.section
+                                            initial={{ opacity: 0, y: 20 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            className="pb-16 border-b border-slate-200 dark:border-slate-800"
+                                        >
+                                            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-10">
+                                                <button
+                                                    onClick={() => setActiveSubTab('system')}
+                                                    className={`flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold uppercase tracking-wider text-xs transition-all duration-300 cursor-pointer ${
+                                                        activeSubTab === 'system'
+                                                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                                                            : isDarkMode
+                                                            ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                    }`}
+                                                >
+                                                    <Layers size={18} />
+                                                    {config.systemTabLabel || 'System Integration'}
+                                                </button>
+                                                <button
+                                                    onClick={() => setActiveSubTab('product')}
+                                                    className={`flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold uppercase tracking-wider text-xs transition-all duration-300 cursor-pointer ${
+                                                        activeSubTab === 'product'
+                                                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                                                            : isDarkMode
+                                                            ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                    }`}
+                                                >
+                                                    <Activity size={18} />
+                                                    {config.productTabLabel || 'Analyzers & Products'}
+                                                </button>
+                                            </div>
+
+                                            {activeSubTab === 'system' ? (
+                                                <div className="space-y-6">
+                                                    <h4 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                        {config.systemTitle}
+                                                    </h4>
+                                                    <p className={`text-base leading-relaxed font-light mb-8 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                                        {config.systemDesc}
+                                                    </p>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                        {config.systemCards.map((card, idx) => (
+                                                            <div key={idx} className={`p-6 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-800/40 border-slate-700/60' : 'bg-white border-slate-100 shadow-sm'}`}>
+                                                                <div className="flex items-center gap-3 mb-3 text-emerald-500">
+                                                                    {card.icon === 'Layers' && <Layers size={22} />}
+                                                                    {card.icon === 'Settings' && <Settings size={22} />}
+                                                                    {card.icon === 'Zap' && <Zap size={22} />}
+                                                                    {card.icon === 'Wrench' && <Wrench size={22} />}
+                                                                    <h5 className="font-bold text-lg">{card.title}</h5>
+                                                                </div>
+                                                                <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                                                                    {card.desc}
+                                                                </p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+
+                                                    {config.designatedSources && (
+                                                        <div className="mt-12 p-6 rounded-2xl border bg-emerald-500/5 border-emerald-500/10">
+                                                            <h5 className="font-bold text-lg mb-6 text-emerald-500 flex items-center gap-2">
+                                                                <Info size={20} />
+                                                                Designated Monitoring Sources & Sampling Locations
+                                                            </h5>
+                                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                                {config.designatedSources.map((source, sIdx) => (
+                                                                    <div key={sIdx} className={`p-5 rounded-xl border transition-all duration-300 hover:shadow-md ${isDarkMode ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white border-slate-100 shadow-sm'}`}>
+                                                                        <span className="text-emerald-500 text-[10px] font-extrabold uppercase tracking-widest block mb-2">{source.point}</span>
+                                                                        <h6 className={`font-bold text-base mb-2 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{source.name}</h6>
+                                                                        <p className={`text-xs leading-relaxed font-light ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{source.desc}</p>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-6">
+                                                    <h4 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                        {config.productTitle}
+                                                    </h4>
+                                                    <p className={`text-base leading-relaxed font-light mb-8 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                                        {config.productDesc}
+                                                    </p>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                                        {config.productCards.map((card, idx) => (
+                                                            <div id={card.id} key={idx} className={`p-6 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-800/40 border-slate-700/60' : 'bg-white border-slate-100 shadow-sm'}`}>
+                                                                <span className="bg-emerald-500/10 text-emerald-500 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md mb-3 inline-block">{card.type}</span>
+                                                                <h5 className="font-bold text-lg mb-2">{card.name}</h5>
+                                                                <ul className="text-xs space-y-1.5 mb-4 text-slate-500 dark:text-slate-400">
+                                                                    {card.specs.map((spec, sIdx) => {
+                                                                        const parts = spec.split(':');
+                                                                        return (
+                                                                            <li key={sIdx}>
+                                                                                <strong className="text-slate-700 dark:text-slate-300">{parts[0]}:</strong>
+                                                                                {parts.slice(1).join(':')}
+                                                                            </li>
+                                                                        );
+                                                                    })}
+                                                                </ul>
+                                                                <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                                                                    {card.desc}
+                                                                </p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </motion.section>
+                                    </>
+                                );
+                            })()
+                        ) : (
+                            <>
+                                {/* 1. Long Description */}
+                                {product.longDescription && (
+                                    <motion.section
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        className="pb-16 border-b border-slate-200 dark:border-slate-800"
+                                    >
+                                        <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Overview</h3>
+                                        <div className={`prose max-w-none ${isDarkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
+                                            {product.longDescription.split('\n\n').map((paragraph, idx) => (
+                                                <p key={idx} className="mb-4 leading-relaxed text-lg font-light">{paragraph}</p>
+                                            ))}
+                                        </div>
+                                    </motion.section>
+                                )}
+
+                                {/* 2. Operating Principle */}
+                                {product.operatingPrinciple && (
+                                    <motion.section
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        className="pb-16 border-b border-slate-200 dark:border-slate-800"
+                                    >
+                                        <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Operating Principle</h3>
+                                        <p className={`text-lg leading-relaxed font-light ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                                            {product.operatingPrinciple}
+                                        </p>
+                                    </motion.section>
+                                )}
+                            </>
                         )}
 
                         {/* 3. Applications */}

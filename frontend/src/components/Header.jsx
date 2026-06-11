@@ -6,6 +6,7 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeSubMenu, setActiveSubMenu] = useState(null);
+    const [activeNestedMenu, setActiveNestedMenu] = useState(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -21,13 +22,126 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
             name: 'Products',
             href: '/#products',
             dropdown: [
-                { name: 'Continuous Ambient Air Quality Monitoring Stations', href: '/product/698da53e5bff466e7fbecc3b' },
-                { name: 'Continuous Emission Monitoring Systems', href: '/product/698da53e5bff466e7fbecc39' },
-                { name: 'Effluent Quality Monitoring Systems', href: '/product/698da53e5bff466e7fbecc40' },
-                { name: 'IIoT-based Data Loggers & Remote Calibration Units', href: '/product/698da53e5bff466e7fbecc38' },
-                { name: 'Weather Monitoring Systems (WMS)', href: '/product/698da53e5bff466e7fbecc41' },
-                { name: 'Smart City Environmental Monitoring', href: '/product/698da53e5bff466e7fbecc42' },
-                { name: 'Advanced Instrumentation', href: '/product/698da53e5bff466e7fbecc43' }
+                { 
+                    name: 'Continuous Ambient Air Quality Monitoring Stations', 
+                    href: '/product/698da53e5bff466e7fbecc3b',
+                    subItems: [
+                        { name: 'System', href: '/product/698da53e5bff466e7fbecc3b?tab=system' },
+                        { 
+                            name: 'Product', 
+                            href: '/product/698da53e5bff466e7fbecc3b?tab=product',
+                            nestedItems: [
+                                { name: 'SO2 Analyzer', href: '/product/698da53e5bff466e7fbecc3b?tab=product&item=so2' },
+                                { name: 'NO-NO2-NOx Analyzer', href: '/product/698da53e5bff466e7fbecc3b?tab=product&item=nox' },
+                                { name: 'CO Analyzer', href: '/product/698da53e5bff466e7fbecc3b?tab=product&item=co' },
+                                { name: 'O3 Analyzer', href: '/product/698da53e5bff466e7fbecc3b?tab=product&item=o3' },
+                                { name: 'PM Monitor', href: '/product/698da53e5bff466e7fbecc3b?tab=product&item=pm' }
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    name: 'Continuous Emission Monitoring Systems', 
+                    href: '/product/698da53e5bff466e7fbecc39',
+                    subItems: [
+                        { name: 'System', href: '/product/698da53e5bff466e7fbecc39?tab=system' },
+                        { 
+                            name: 'Product', 
+                            href: '/product/698da53e5bff466e7fbecc39?tab=product',
+                            nestedItems: [
+                                { name: 'SO2-NO-NO2 Analyzer', href: '/product/698da53e5bff466e7fbecc39?tab=product&item=so2' },
+                                { name: 'CO / CO2 Analyzer', href: '/product/698da53e5bff466e7fbecc39?tab=product&item=co' },
+                                { name: 'Oxygen Analyzer', href: '/product/698da53e5bff466e7fbecc39?tab=product&item=o2' },
+                                { name: 'PM Opacity Monitor', href: '/product/698da53e5bff466e7fbecc39?tab=product&item=pm' },
+                                { name: 'Flow Monitor', href: '/product/698da53e5bff466e7fbecc39?tab=product&item=flow' }
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    name: 'Effluent Quality Monitoring Systems', 
+                    href: '/product/698da53e5bff466e7fbecc40',
+                    subItems: [
+                        { name: 'System', href: '/product/698da53e5bff466e7fbecc40?tab=system' },
+                        { 
+                            name: 'Product', 
+                            href: '/product/698da53e5bff466e7fbecc40?tab=product',
+                            nestedItems: [
+                                { name: 'pH/ORP Sensor', href: '/product/698da53e5bff466e7fbecc40?tab=product&item=ph' },
+                                { name: 'COD/BOD Analyzer', href: '/product/698da53e5bff466e7fbecc40?tab=product&item=cod' },
+                                { name: 'TSS Sensor', href: '/product/698da53e5bff466e7fbecc40?tab=product&item=tss' },
+                                { name: 'Electromagnetic Flow Meter', href: '/product/698da53e5bff466e7fbecc40?tab=product&item=flow' }
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    name: 'IIoT-based Data Loggers & Remote Calibration Units', 
+                    href: '/product/698da53e5bff466e7fbecc38',
+                    subItems: [
+                        { name: 'System', href: '/product/698da53e5bff466e7fbecc38?tab=system' },
+                        { 
+                            name: 'Product', 
+                            href: '/product/698da53e5bff466e7fbecc38?tab=product',
+                            nestedItems: [
+                                { name: 'Modbus/Analog Gateway', href: '/product/698da53e5bff466e7fbecc38?tab=product&item=gateway' },
+                                { name: 'Remote Calibration Module', href: '/product/698da53e5bff466e7fbecc38?tab=product&item=cal_module' },
+                                { name: 'MQTT Encryption Server Link', href: '/product/698da53e5bff466e7fbecc38?tab=product&item=mqtt_link' }
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    name: 'Weather Monitoring Systems (WMS)', 
+                    href: '/product/698da53e5bff466e7fbecc41',
+                    subItems: [
+                        { name: 'System', href: '/product/698da53e5bff466e7fbecc41?tab=system' },
+                        { 
+                            name: 'Product', 
+                            href: '/product/698da53e5bff466e7fbecc41?tab=product',
+                            nestedItems: [
+                                { name: 'Ultrasonic Wind Sensor', href: '/product/698da53e5bff466e7fbecc41?tab=product&item=wind' },
+                                { name: 'Temp/Humidity Sensor', href: '/product/698da53e5bff466e7fbecc41?tab=product&item=temp_hum' },
+                                { name: 'Rain Gauge', href: '/product/698da53e5bff466e7fbecc41?tab=product&item=rain' },
+                                { name: 'Pyranometer', href: '/product/698da53e5bff466e7fbecc41?tab=product&item=pyrano' },
+                                { name: 'Barometric Pressure Sensor', href: '/product/698da53e5bff466e7fbecc41?tab=product&item=baro' }
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    name: 'Smart City Environmental Monitoring', 
+                    href: '/product/698da53e5bff466e7fbecc42',
+                    subItems: [
+                        { name: 'System', href: '/product/698da53e5bff466e7fbecc42?tab=system' },
+                        { 
+                            name: 'Product', 
+                            href: '/product/698da53e5bff466e7fbecc42?tab=product',
+                            nestedItems: [
+                                { name: 'Compact Gas Node', href: '/product/698da53e5bff466e7fbecc42?tab=product&item=gas_node' },
+                                { name: 'Compact PM Node', href: '/product/698da53e5bff466e7fbecc42?tab=product&item=pm_node' },
+                                { name: 'Noise Level Sensor', href: '/product/698da53e5bff466e7fbecc42?tab=product&item=noise' }
+                            ]
+                        }
+                    ]
+                },
+                { 
+                    name: 'Advanced Instrumentation', 
+                    href: '/product/698da53e5bff466e7fbecc43',
+                    subItems: [
+                        { name: 'System', href: '/product/698da53e5bff466e7fbecc43?tab=system' },
+                        { 
+                            name: 'Product', 
+                            href: '/product/698da53e5bff466e7fbecc43?tab=product',
+                            nestedItems: [
+                                { name: 'Electromagnetic Flow Meter', href: '/product/698da53e5bff466e7fbecc43?tab=product&item=flow_meter' },
+                                { name: 'Radar Level Transmitter', href: '/product/698da53e5bff466e7fbecc43?tab=product&item=radar_level' },
+                                { name: 'Pressure Transmitter', href: '/product/698da53e5bff466e7fbecc43?tab=product&item=pressure' },
+                                { name: 'Analytical Electrodes', href: '/product/698da53e5bff466e7fbecc43?tab=product&item=electrodes' }
+                            ]
+                        }
+                    ]
+                }
             ]
         },
         { name: 'Services', href: '/#services' },
@@ -84,13 +198,17 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
                                             {link.dropdown.map((dropItem) => (
                                                 <div key={dropItem.name} className="mb-2 last:mb-0">
                                                     {dropItem.subItems ? (
-                                                        <div className="relative">
+                                                        <div 
+                                                            className="relative"
+                                                            onMouseEnter={() => setActiveSubMenu(dropItem.name)}
+                                                            onMouseLeave={() => {setActiveSubMenu(null); setActiveNestedMenu(null);}}
+                                                        >
                                                             <button
                                                                 onClick={(e) => {
                                                                     e.preventDefault();
                                                                     setActiveSubMenu(activeSubMenu === dropItem.name ? null : dropItem.name);
                                                                 }}
-                                                                className={`w-full text-left text-sm font-bold py-2 px-3 rounded-lg flex justify-between items-center transition-colors ${isDarkMode ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-50'}`}
+                                                                className={`w-full text-left text-sm font-bold py-2 px-3 rounded-lg flex justify-between items-center transition-colors ${isDarkMode ? 'text-slate-300 hover:bg-slate-800 hover:text-emerald-500' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-600'}`}
                                                             >
                                                                 {dropItem.name}
                                                                 <ChevronDown size={14} className={`transition-transform duration-300 ${activeSubMenu === dropItem.name ? 'rotate-180' : ''}`} />
@@ -100,13 +218,58 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
                                                             {activeSubMenu === dropItem.name && (
                                                                 <div className={`mt-1 ml-4 pl-4 border-l-2 border-emerald-500/20 space-y-1`}>
                                                                     {dropItem.subItems.map((sub) => (
-                                                                        <a
-                                                                            key={sub.name}
-                                                                            href={sub.href}
-                                                                            className={`block text-xs font-semibold py-2 px-2 rounded-lg transition-colors ${isDarkMode ? 'text-slate-400 hover:text-emerald-500' : 'text-slate-600 hover:text-emerald-600'}`}
-                                                                        >
-                                                                            {sub.name}
-                                                                        </a>
+                                                                        <div key={sub.name} className="relative">
+                                                                            {sub.nestedItems ? (
+                                                                                <div 
+                                                                                    className="relative"
+                                                                                    onMouseEnter={() => setActiveNestedMenu(sub.name)}
+                                                                                    onMouseLeave={() => setActiveNestedMenu(null)}
+                                                                                >
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.preventDefault();
+                                                                                            setActiveNestedMenu(activeNestedMenu === sub.name ? null : sub.name);
+                                                                                        }}
+                                                                                        className={`w-full text-left text-xs font-semibold py-2 px-2 rounded-lg flex justify-between items-center transition-colors cursor-pointer ${
+                                                                                            isDarkMode ? 'text-slate-400 hover:bg-slate-800 hover:text-emerald-500' : 'text-slate-600 hover:bg-slate-50 hover:text-emerald-600'
+                                                                                        }`}
+                                                                                    >
+                                                                                        {sub.name}
+                                                                                        <ChevronDown size={12} className="rotate-270 transform -rotate-90" />
+                                                                                    </button>
+                                                                                    
+                                                                                    {/* Nested Fly-out (Side Dropdown) */}
+                                                                                    {activeNestedMenu === sub.name && (
+                                                                                        <div className="absolute left-full top-0 ml-2 pt-0 min-w-[200px] z-[120]">
+                                                                                            <div className={`p-3 rounded-xl shadow-2xl border space-y-1 ${
+                                                                                                isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'
+                                                                                            }`}>
+                                                                                                {sub.nestedItems.map((nested) => (
+                                                                                                    <a
+                                                                                                        key={nested.name}
+                                                                                                        href={nested.href}
+                                                                                                        className={`block text-[11px] font-medium py-1.5 px-2 rounded-lg transition-colors no-underline ${
+                                                                                                            isDarkMode ? 'text-slate-400 hover:bg-slate-800 hover:text-emerald-500' : 'text-slate-600 hover:bg-slate-50 hover:text-emerald-600'
+                                                                                                        }`}
+                                                                                                    >
+                                                                                                        {nested.name}
+                                                                                                    </a>
+                                                                                                ))}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    )}
+                                                                                </div>
+                                                                            ) : (
+                                                                                <a
+                                                                                    href={sub.href}
+                                                                                    className={`block text-xs font-semibold py-2 px-2 rounded-lg transition-colors no-underline ${
+                                                                                        isDarkMode ? 'text-slate-400 hover:text-emerald-500' : 'text-slate-600 hover:text-emerald-600'
+                                                                                    }`}
+                                                                                >
+                                                                                    {sub.name}
+                                                                                </a>
+                                                                            )}
+                                                                        </div>
                                                                     ))}
                                                                 </div>
                                                             )}
@@ -180,14 +343,35 @@ const Header = ({ isDarkMode, toggleTheme, onOpenPartnerPortal }) => {
                                                             </span>
                                                             <div className="pl-4 flex flex-col gap-3">
                                                                 {subLink.subItems.map(nested => (
-                                                                    <a
-                                                                        key={nested.name}
-                                                                        href={nested.href}
-                                                                        onClick={() => setMobileMenuOpen(false)}
-                                                                        className={`text-base font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
-                                                                    >
-                                                                        {nested.name}
-                                                                    </a>
+                                                                    <div key={nested.name} className="flex flex-col gap-2">
+                                                                        {nested.nestedItems ? (
+                                                                            <>
+                                                                                <span className={`text-base font-bold ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                                                                                    {nested.name}
+                                                                                </span>
+                                                                                <div className="pl-4 flex flex-col gap-2">
+                                                                                    {nested.nestedItems.map(subNested => (
+                                                                                        <a
+                                                                                            key={subNested.name}
+                                                                                            href={subNested.href}
+                                                                                            onClick={() => setMobileMenuOpen(false)}
+                                                                                            className={`text-sm font-semibold no-underline transition-colors ${isDarkMode ? 'text-slate-400 hover:text-emerald-500' : 'text-slate-600 hover:text-emerald-600'}`}
+                                                                                        >
+                                                                                            {subNested.name}
+                                                                                        </a>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </>
+                                                                        ) : (
+                                                                            <a
+                                                                                href={nested.href}
+                                                                                onClick={() => setMobileMenuOpen(false)}
+                                                                                className={`text-base font-medium no-underline transition-colors ${isDarkMode ? 'text-slate-400 hover:text-emerald-500' : 'text-slate-600 hover:text-emerald-600'}`}
+                                                                            >
+                                                                                {nested.name}
+                                                                            </a>
+                                                                        )}
+                                                                    </div>
                                                                 ))}
                                                             </div>
                                                         </div>
