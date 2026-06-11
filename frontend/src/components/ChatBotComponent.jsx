@@ -7,7 +7,7 @@ const SN_ENVIRO_KNOWLEDGE = {
     status: "300+ successful projects since 2017. Our technical team has 100+ years of combined experience.",
     clients: "Our prestigious clients include Ultratech, Adani, Vedanta, Cipla, and Saint Gobain.",
     phone: "+91 73309 33306",
-    email: "mail@snenviro.com",
+    email: "jaswanth.avs19@gmail.com",
     address: "6-1-279, Plot no.10, Mantri Mansion, Walker Town, Padmarao Nagar, Hyderabad, Telangana 500020"
 };
 
@@ -18,7 +18,7 @@ const ChatBotComponent = () => {
     const knowledge = {
         products: "We offer advanced environmental monitoring solutions including:\n• CAAQMS (Air Quality)\n• CEMS (Stack Emissions)\n• EQMS (Water Quality)\n• Weather Monitoring Systems\n• Industrial IoT Data Loggers",
         clients: "We are trusted by industry leaders such as:\n• Ultratech Cement\n• Adani Group\n• Vedanta Resources\n• Cipla\n• Saint Gobain",
-        contact: "You can reach us at:\n\n📞 Phone: +91 73309 33306\n📧 Email: mail@snenviro.com\n📍 Address: 6-1-279, Plot No. 10, Mantri Mansion, Walker Town, Padmarao Nagar, Secunderabad, Hyderabad, Telangana 500025",
+        contact: "You can reach us at:\n\n📞 Phone: +91 73309 33306\n📧 Email: jaswanth.avs19@gmail.com\n📍 Address: 6-1-279, Plot No. 10, Mantri Mansion, Walker Town, Padmarao Nagar, Secunderabad, Hyderabad, Telangana 500025",
         about: "Since 2017, SN Enviro has delivered 300+ successful projects. Our technical team boasts 100+ years of combined experience in environmental instrumentation and compliance monitoring."
     };
 

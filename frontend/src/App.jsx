@@ -62,7 +62,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Router>
-        <div className={`flex flex-col min-h-screen transition-colors duration-500 ${isDarkMode ? 'bg-slate-900 text-slate-200' : 'bg-white text-slate-900'}`}>
+        <div className={`flex flex-col min-h-screen w-full overflow-x-hidden transition-colors duration-500 ${isDarkMode ? 'bg-slate-900 text-slate-200' : 'bg-white text-slate-900'}`}>
 
           <Suspense fallback={<LoadingFallback />}>
             <Routes>

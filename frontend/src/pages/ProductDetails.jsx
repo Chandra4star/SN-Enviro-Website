@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle, XCircle, Activity, Info, FileText, Settings, Layers, Zap, Wrench, HelpCircle } from 'lucide-react';
+import { useParams, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, CheckCircle, XCircle, Activity, Info, FileText, Settings, Layers, Zap, Wrench, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 
 const productSubTabsConfig = {
     // CAAQMS
@@ -201,7 +201,15 @@ const ProductDetails = ({ isDarkMode }) => {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [activeSubTab, setActiveSubTab] = useState('system');
+    const [activeTab, setActiveTab] = useState('overview');
+    const [openFaqIndex, setOpenFaqIndex] = useState(null);
+
+    const tabs = [
+        { id: 'overview', label: 'Overview', icon: FileText },
+        { id: 'specs', label: 'Specs & Compliance', icon: Settings },
+        { id: 'applications', label: 'Applications', icon: Layers },
+        { id: 'faqs', label: 'FAQs & More', icon: HelpCircle }
+    ];
 
     const defaultProductList = [
         {
@@ -512,6 +520,7 @@ const ProductDetails = ({ isDarkMode }) => {
     ];
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         // Bypassing backend fetch to resolve loading issues and DB inconsistencies
         const localProduct = defaultProductList.find(p => p._id === id);
         if (localProduct) {
@@ -628,315 +637,239 @@ const ProductDetails = ({ isDarkMode }) => {
                     </motion.div>
                 </div>
 
-                {/* EXTENDED DETAILS SECTION - Full Width */}
-                <div className="mt-12">
-                    <h2 className={`text-3xl font-black mb-12 text-center uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                        Comprehensive <span className="text-emerald-500">Overview</span>
-                    </h2>
+                {/* EXTENDED DETAILS SECTION - Interactive Tabs */}
+                <div className="mt-16 bg-slate-50 dark:bg-slate-800/30 py-16 rounded-[3rem] border border-slate-100 dark:border-slate-800">
+                    <div className="px-6 lg:px-16">
+                        <h2 className={`text-3xl font-black mb-12 text-center uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                            Comprehensive <span className="text-emerald-500">Overview</span>
+                        </h2>
 
-                    <div className="max-w-5xl mx-auto space-y-16">
-                        {/* 1. Long Description & Custom Configured Sections */}
-                        {productSubTabsConfig[product._id] ? (
-                            (() => {
-                                const config = productSubTabsConfig[product._id];
-                                return (
-                                    <>
-                                        {/* Intro */}
-                                        <motion.section
-                                            initial={{ opacity: 0, y: 20 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true }}
-                                            className="pb-8 border-b border-slate-200 dark:border-slate-800"
-                                        >
-                                            <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Overview</h3>
-                                            <div className={`prose max-w-none ${isDarkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
-                                                <p className="mb-4 leading-relaxed text-lg font-light text-justify">
-                                                    {config.intro}
-                                                </p>
+                        {/* Tab Navigation */}
+                        <div className="flex flex-wrap justify-center gap-4 mb-12">
+                            {tabs.map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`flex items-center gap-3 px-6 py-4 rounded-2xl font-bold transition-all duration-300 ${
+                                        activeTab === tab.id 
+                                            ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/30 -translate-y-1' 
+                                            : `${isDarkMode ? 'bg-slate-800 text-slate-400 hover:bg-slate-700' : 'bg-white text-slate-600 hover:bg-slate-100'} hover:shadow-md border border-slate-200 dark:border-slate-700`
+                                    }`}
+                                >
+                                    <tab.icon size={20} />
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Tab Content */}
+                        <div className={`relative min-h-[400px] rounded-[2rem] p-8 md:p-12 shadow-2xl transition-colors duration-500 ${isDarkMode ? 'bg-slate-900 border border-slate-800 shadow-none' : 'bg-white border border-slate-100'}`}>
+                            <AnimatePresence mode="wait">
+                                {activeTab === 'overview' && (
+                                    <motion.div
+                                        key="overview"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="space-y-12"
+                                    >
+                                        {product.longDescription && (
+                                            <div>
+                                                <h3 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                    <Info className="text-emerald-500" /> Detailed Description
+                                                </h3>
+                                                <div className={`prose max-w-none ${isDarkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
+                                                    {product.longDescription.split('\n\n').map((paragraph, idx) => (
+                                                        <p key={idx} className="mb-4 leading-relaxed text-lg font-medium">{paragraph}</p>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </motion.section>
-
-                                        {/* System and Product Tabs */}
-                                        <motion.section
-                                            initial={{ opacity: 0, y: 20 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true }}
-                                            className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                                        >
-                                            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-10">
-                                                <button
-                                                    onClick={() => setActiveSubTab('system')}
-                                                    className={`flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold uppercase tracking-wider text-xs transition-all duration-300 cursor-pointer ${
-                                                        activeSubTab === 'system'
-                                                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                                                            : isDarkMode
-                                                            ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                                    }`}
-                                                >
-                                                    <Layers size={18} />
-                                                    {config.systemTabLabel || 'System Integration'}
-                                                </button>
-                                                <button
-                                                    onClick={() => setActiveSubTab('product')}
-                                                    className={`flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold uppercase tracking-wider text-xs transition-all duration-300 cursor-pointer ${
-                                                        activeSubTab === 'product'
-                                                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                                                            : isDarkMode
-                                                            ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
-                                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                                    }`}
-                                                >
-                                                    <Activity size={18} />
-                                                    {config.productTabLabel || 'Analyzers & Products'}
-                                                </button>
-                                            </div>
-
-                                            {activeSubTab === 'system' ? (
-                                                <div className="space-y-6">
-                                                    <h4 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                                                        {config.systemTitle}
-                                                    </h4>
-                                                    <p className={`text-base leading-relaxed font-light mb-8 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                                                        {config.systemDesc}
+                                        )}
+                                        {product.operatingPrinciple && (
+                                            <div>
+                                                <h3 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                    <Zap className="text-emerald-500" /> Operating Principle
+                                                </h3>
+                                                <div className={`p-6 md:p-8 rounded-2xl ${isDarkMode ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
+                                                    <p className={`text-lg leading-relaxed font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                                                        {product.operatingPrinciple}
                                                     </p>
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                        {config.systemCards.map((card, idx) => (
-                                                            <div key={idx} className={`p-6 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-800/40 border-slate-700/60' : 'bg-white border-slate-100 shadow-sm'}`}>
-                                                                <div className="flex items-center gap-3 mb-3 text-emerald-500">
-                                                                    {card.icon === 'Layers' && <Layers size={22} />}
-                                                                    {card.icon === 'Settings' && <Settings size={22} />}
-                                                                    {card.icon === 'Zap' && <Zap size={22} />}
-                                                                    {card.icon === 'Wrench' && <Wrench size={22} />}
-                                                                    <h5 className="font-bold text-lg">{card.title}</h5>
-                                                                </div>
-                                                                <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                                                                    {card.desc}
-                                                                </p>
-                                                            </div>
-                                                        ))}
-                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                )}
 
-                                                    {config.designatedSources && (
-                                                        <div className="mt-12 p-6 rounded-2xl border bg-emerald-500/5 border-emerald-500/10">
-                                                            <h5 className="font-bold text-lg mb-6 text-emerald-500 flex items-center gap-2">
-                                                                <Info size={20} />
-                                                                Designated Monitoring Sources & Sampling Locations
-                                                            </h5>
-                                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                                {config.designatedSources.map((source, sIdx) => (
-                                                                    <div key={sIdx} className={`p-5 rounded-xl border transition-all duration-300 hover:shadow-md ${isDarkMode ? 'bg-slate-900/60 border-slate-700/50' : 'bg-white border-slate-100 shadow-sm'}`}>
-                                                                        <span className="text-emerald-500 text-[10px] font-extrabold uppercase tracking-widest block mb-2">{source.point}</span>
-                                                                        <h6 className={`font-bold text-base mb-2 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{source.name}</h6>
-                                                                        <p className={`text-xs leading-relaxed font-light ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{source.desc}</p>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
+                                {activeTab === 'specs' && (
+                                    <motion.div
+                                        key="specs"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="space-y-12"
+                                    >
+                                        {product.technicalSpecs && product.technicalSpecs.length > 0 && (
+                                            <div>
+                                                <h3 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                    <Settings className="text-emerald-500" /> Technical Specifications
+                                                </h3>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {product.technicalSpecs.map((spec, idx) => (
+                                                        <div key={idx} className={`flex flex-col p-5 rounded-2xl border transition-all hover:shadow-md ${isDarkMode ? 'bg-slate-800/50 border-slate-700 hover:bg-slate-800' : 'bg-white border-slate-100 hover:border-emerald-500/30'}`}>
+                                                            <span className={`text-xs font-bold uppercase tracking-wider mb-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{spec.label}</span>
+                                                            <span className={`text-lg font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{spec.value}</span>
                                                         </div>
-                                                    )}
+                                                    ))}
                                                 </div>
-                                            ) : (
-                                                <div className="space-y-6">
-                                                    <h4 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                                                        {config.productTitle}
-                                                    </h4>
-                                                    <p className={`text-base leading-relaxed font-light mb-8 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                                                        {config.productDesc}
-                                                    </p>
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                                        {config.productCards.map((card, idx) => (
-                                                            <div id={card.id} key={idx} className={`p-6 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-800/40 border-slate-700/60' : 'bg-white border-slate-100 shadow-sm'}`}>
-                                                                <span className="bg-emerald-500/10 text-emerald-500 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md mb-3 inline-block">{card.type}</span>
-                                                                <h5 className="font-bold text-lg mb-2">{card.name}</h5>
-                                                                <ul className="text-xs space-y-1.5 mb-4 text-slate-500 dark:text-slate-400">
-                                                                    {card.specs.map((spec, sIdx) => {
-                                                                        const parts = spec.split(':');
-                                                                        return (
-                                                                            <li key={sIdx}>
-                                                                                <strong className="text-slate-700 dark:text-slate-300">{parts[0]}:</strong>
-                                                                                {parts.slice(1).join(':')}
-                                                                            </li>
-                                                                        );
-                                                                    })}
-                                                                </ul>
-                                                                <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-                                                                    {card.desc}
-                                                                </p>
+                                            </div>
+                                        )}
+                                        {product.compliance && (
+                                            <div>
+                                                <h3 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                    <CheckCircle className="text-emerald-500" /> Regulatory Compliance
+                                                </h3>
+                                                <div className={`flex items-start gap-4 p-6 rounded-2xl border border-emerald-500/20 ${isDarkMode ? 'bg-emerald-500/5' : 'bg-emerald-50'}`}>
+                                                    <CheckCircle className="text-emerald-500 shrink-0 mt-1" size={24} />
+                                                    <p className={`text-lg font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{product.compliance}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                )}
+
+                                {activeTab === 'applications' && (
+                                    <motion.div
+                                        key="applications"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="space-y-12"
+                                    >
+                                        {product.applications && product.applications.length > 0 && (
+                                            <div>
+                                                <h3 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                    <Layers className="text-emerald-500" /> Applications & Use Cases
+                                                </h3>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {product.applications.map((app, idx) => (
+                                                        <div key={idx} className={`flex items-center gap-4 p-5 rounded-2xl border transition-all hover:translate-x-2 ${isDarkMode ? 'bg-slate-800/50 border-slate-700 hover:bg-slate-800' : 'bg-white border-slate-100 hover:border-emerald-500/30 hover:shadow-md'}`}>
+                                                            <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                                                                <CheckCircle size={20} className="text-emerald-500" />
                                                             </div>
-                                                        ))}
-                                                    </div>
+                                                            <span className={`text-lg font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{app}</span>
+                                                        </div>
+                                                    ))}
                                                 </div>
-                                            )}
-                                        </motion.section>
-                                    </>
-                                );
-                            })()
-                        ) : (
-                            <>
-                                {/* 1. Long Description */}
-                                {product.longDescription && (
-                                    <motion.section
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                                    >
-                                        <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Overview</h3>
-                                        <div className={`prose max-w-none ${isDarkMode ? 'prose-invert text-slate-400' : 'text-slate-600'}`}>
-                                            {product.longDescription.split('\n\n').map((paragraph, idx) => (
-                                                <p key={idx} className="mb-4 leading-relaxed text-lg font-light">{paragraph}</p>
-                                            ))}
-                                        </div>
-                                    </motion.section>
+                                            </div>
+                                        )}
+                                        {product.installation && (
+                                            <div>
+                                                <h3 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                    <Wrench className="text-emerald-500" /> Installation & Commissioning
+                                                </h3>
+                                                <div className={`p-6 md:p-8 rounded-2xl ${isDarkMode ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
+                                                    <p className={`text-lg leading-relaxed font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                                                        {product.installation}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </motion.div>
                                 )}
 
-                                {/* 2. Operating Principle */}
-                                {product.operatingPrinciple && (
-                                    <motion.section
+                                {activeTab === 'faqs' && (
+                                    <motion.div
+                                        key="faqs"
                                         initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        className="pb-16 border-b border-slate-200 dark:border-slate-800"
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="space-y-12"
                                     >
-                                        <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Operating Principle</h3>
-                                        <p className={`text-lg leading-relaxed font-light ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                                            {product.operatingPrinciple}
-                                        </p>
-                                    </motion.section>
+                                        {/* Pros & Cons */}
+                                        {((product.pros && product.pros.length > 0) || (product.cons && product.cons.length > 0)) && (
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                                {product.pros && product.pros.length > 0 && (
+                                                    <div className={`p-6 md:p-8 rounded-3xl border border-emerald-500/20 ${isDarkMode ? 'bg-emerald-500/5' : 'bg-emerald-50'}`}>
+                                                        <h3 className="text-emerald-500 font-bold text-xl mb-6 flex items-center gap-2">
+                                                            <CheckCircle size={24} /> Advantages
+                                                        </h3>
+                                                        <ul className="space-y-4">
+                                                            {product.pros.map((pro, index) => (
+                                                                <li key={index} className="flex items-start gap-3">
+                                                                    <CheckCircle size={20} className="text-emerald-500 mt-1 shrink-0" />
+                                                                    <span className={`font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{pro}</span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+
+                                                {product.cons && product.cons.length > 0 && (
+                                                    <div className={`p-6 md:p-8 rounded-3xl border border-slate-500/20 ${isDarkMode ? 'bg-slate-800/50' : 'bg-slate-50'}`}>
+                                                        <h3 className="text-slate-500 font-bold text-xl mb-6 flex items-center gap-2">
+                                                            <XCircle size={24} /> Considerations
+                                                        </h3>
+                                                        <ul className="space-y-4">
+                                                            {product.cons.map((con, index) => (
+                                                                <li key={index} className="flex items-start gap-3">
+                                                                    <XCircle size={20} className="text-slate-400 mt-1 shrink-0" />
+                                                                    <span className={`font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{con}</span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {/* FAQs Accordion */}
+                                        {product.faqs && product.faqs.length > 0 && (
+                                            <div>
+                                                <h3 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                                                    <HelpCircle className="text-emerald-500" /> Frequently Asked Questions
+                                                </h3>
+                                                <div className="space-y-4">
+                                                    {product.faqs.map((faq, idx) => (
+                                                        <div 
+                                                            key={idx} 
+                                                            className={`border rounded-2xl overflow-hidden transition-all duration-300 ${isDarkMode ? 'border-slate-700 bg-slate-800/30' : 'border-slate-200 bg-white'}`}
+                                                        >
+                                                            <button
+                                                                onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+                                                                className={`w-full flex items-center justify-between p-6 text-left transition-colors ${openFaqIndex === idx ? (isDarkMode ? 'bg-slate-800' : 'bg-slate-50') : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                                                            >
+                                                                <span className={`text-lg font-semibold pr-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{faq.question}</span>
+                                                                <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${openFaqIndex === idx ? 'bg-emerald-500 text-white rotate-180' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'}`}>
+                                                                    <ChevronDown size={16} />
+                                                                </div>
+                                                            </button>
+                                                            <AnimatePresence>
+                                                                {openFaqIndex === idx && (
+                                                                    <motion.div
+                                                                        initial={{ height: 0, opacity: 0 }}
+                                                                        animate={{ height: 'auto', opacity: 1 }}
+                                                                        exit={{ height: 0, opacity: 0 }}
+                                                                        transition={{ duration: 0.3 }}
+                                                                    >
+                                                                        <div className={`p-6 pt-0 border-t ${isDarkMode ? 'border-slate-700 bg-slate-800' : 'border-slate-100 bg-slate-50'}`}>
+                                                                            <p className={`text-lg font-medium leading-relaxed mt-4 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{faq.answer}</p>
+                                                                        </div>
+                                                                    </motion.div>
+                                                                )}
+                                                            </AnimatePresence>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </motion.div>
                                 )}
-                            </>
-                        )}
-
-                        {/* 3. Applications */}
-                        {product.applications && product.applications.length > 0 && (
-                            <motion.section
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                            >
-                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Applications & Use Cases</h3>
-                                <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {product.applications.map((app, idx) => (
-                                        <li key={idx} className="flex items-center gap-3">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                                            <span className={`text-lg font-light ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{app}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </motion.section>
-                        )}
-
-                        {/* 4. Installation */}
-                        {product.installation && (
-                            <motion.section
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                            >
-                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Installation & Commissioning</h3>
-                                <p className={`text-lg leading-relaxed font-light ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                                    {product.installation}
-                                </p>
-                            </motion.section>
-                        )}
-
-                        {/* 5. Technical Specs */}
-                        {product.technicalSpecs && product.technicalSpecs.length > 0 && (
-                            <motion.section
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                            >
-                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Technical Specifications</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12">
-                                    {product.technicalSpecs.map((spec, idx) => (
-                                        <div key={idx} className="flex justify-between items-center py-3 border-b border-slate-100 dark:border-slate-800/50">
-                                            <span className={`font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{spec.label}</span>
-                                            <span className={`text-sm text-right ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{spec.value}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </motion.section>
-                        )}
-
-                        {/* 5. Compliance */}
-                        {product.compliance && (
-                            <motion.section
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                            >
-                                <h3 className={`text-2xl font-semibold mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Regulatory Compliance</h3>
-                                <div className="flex items-start gap-4">
-                                    <CheckCircle className="text-emerald-500 shrink-0 mt-1" size={24} />
-                                    <p className={`text-lg font-light ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{product.compliance}</p>
-                                </div>
-                            </motion.section>
-                        )}
-
-                        {/* 7. FAQs */}
-                        {product.faqs && product.faqs.length > 0 && (
-                            <motion.section
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="pb-16 border-b border-slate-200 dark:border-slate-800"
-                            >
-                                <h3 className={`text-2xl font-semibold mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Frequently Asked Questions</h3>
-                                <div className="space-y-8">
-                                    {product.faqs.map((faq, idx) => (
-                                        <div key={idx}>
-                                            <h4 className={`text-lg font-medium mb-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{faq.question}</h4>
-                                            <p className={`text-base font-light leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{faq.answer}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </motion.section>
-                        )}
-
-                        {/* 8. Pros & Cons */}
-                        {((product.pros && product.pros.length > 0) || (product.cons && product.cons.length > 0)) && (
-                            <motion.section
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="pb-16"
-                            >
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                    {product.pros && product.pros.length > 0 && (
-                                        <div>
-                                            <h3 className="text-emerald-500 font-semibold text-xl mb-6">Advantages</h3>
-                                            <ul className="space-y-4">
-                                                {product.pros.map((pro, index) => (
-                                                    <li key={index} className="flex items-start gap-3">
-                                                        <CheckCircle size={20} className="text-emerald-500 mt-1 shrink-0" />
-                                                        <span className={`font-light ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{pro}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-
-                                    {product.cons && product.cons.length > 0 && (
-                                        <div>
-                                            <h3 className="text-slate-500 font-semibold text-xl mb-6">Considerations</h3>
-                                            <ul className="space-y-4">
-                                                {product.cons.map((con, index) => (
-                                                    <li key={index} className="flex items-start gap-3">
-                                                        <XCircle size={20} className="text-slate-400 mt-1 shrink-0" />
-                                                        <span className={`font-light ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{con}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-                                </div>
-                            </motion.section>
-                        )}
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </div>
             </div>
